@@ -263,6 +263,7 @@ export default {
     padding:.5rem;
     transform:translateY(-30px);
     opacity:0;
+    background:#ffffff;
   }
   .nav-all.search-show .nav-btn{
     opacity:0;
@@ -273,6 +274,9 @@ export default {
   }
   .nav-all.search-show .search-wrap{
     transform: translateY(-0px);
+  }
+  .nav-all.search-show .search-wrap.showhistory{
+    z-index:101;
   }
   .search-history .search-hot .title span{
     display:block;

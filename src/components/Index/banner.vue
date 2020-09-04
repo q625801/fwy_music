@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap banner">
     <swiper :options="swiperOption" v-if="carouselArr.length > 1">
         <swiper-slide class="swiper-slide" v-for="(item,index) in carouselArr" :key="index">
           <img :src="item.imageUrl"/>
@@ -35,7 +35,7 @@ export default {
     swiperSlide
   },
   created(){
-    // this.getbanner();
+    this.getbanner();
   },
   methods:{
     getbanner(){
@@ -52,14 +52,18 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.swiper-pagination-bullet{
+.banner .swiper-container{
+  position:relative;
+  z-index:100;
+}
+.banner .swiper-pagination-bullet{
   width:0.466667rem;
   height:0.066667rem;
   border-radius:initial;
   background-color:rgb(200,200,200);
   opacity:1;
 }
-.swiper-pagination-bullet-active{
+.banner .swiper-pagination-bullet-active{
   background-color:rgb(198,47,47);
 }
 @media screen and (min-width:1024px){
