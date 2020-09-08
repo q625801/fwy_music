@@ -15,31 +15,39 @@ let mixin = {
 
         successDataFun(res, successCallback,url){
             let ret = res.data
-            let state = parseInt(ret.state);
-            switch (state) {
-            case 6001: //账号密码错误
-                
-                break
-            default:
-                if(successCallback){
-                    successCallback(res)
-                }
-                break
+
+            if(successCallback){
+                successCallback(res)
             }
+
+            // let state = parseInt(ret.state);
+            // switch (state) {
+            //     case 6001: //账号密码错误
+                
+            //     break
+            // default:
+            //     if(successCallback){
+            //         successCallback(res)
+            //     }
+            //     break
+            // }
         },
         failDataFun(err, errorCallback){
             let ret = err.data
-            let state = parseInt(ret.state);
-            switch (state) {
-            case 6001: //账号密码错误
-                
-                break
-            default:
-                if(errorCallback){
-                    errorCallback(err)
-                }
-                break
+            if(errorCallback){
+                errorCallback(err)
             }
+            // let state = parseInt(ret.state);
+            // switch (state) {
+            // case 6001: //账号密码错误
+                
+            //     break
+            // default:
+            //     if(errorCallback){
+            //         errorCallback(err)
+            //     }
+            //     break
+            // }
         }
     }
 }

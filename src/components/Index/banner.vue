@@ -2,7 +2,7 @@
   <div class="wrap banner">
     <swiper :options="swiperOption" v-if="carouselArr.length > 1">
         <swiper-slide class="swiper-slide" v-for="(item,index) in carouselArr" :key="index">
-          <img :src="item.imageUrl"/>
+          <img :src="item.imageUrl" width="100%"/>
         </swiper-slide>
         <!-- 分页器 -->
         <div class="swiper-pagination"  slot="pagination"></div>
@@ -56,6 +56,9 @@ export default {
   position:relative;
   z-index:100;
 }
+.banner .swiper-slide img{
+  width:1280px;
+}
 .banner .swiper-pagination-bullet{
   width:0.466667rem;
   height:0.066667rem;
@@ -66,7 +69,7 @@ export default {
 .banner .swiper-pagination-bullet-active{
   background-color:rgb(198,47,47);
 }
-@media screen and (min-width:1024px){
+@media screen and (max-width:1280px){
 
 }
 </style>

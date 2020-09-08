@@ -1,7 +1,13 @@
 <template>
   <div class="wrap">
     <nav class="nav-all" :class="{'search-show':checksearch}">
-      <div class="logo fl">Music</div>
+      <div class="logo fl">
+        <div class="pc">Music</div>
+        <div class="wap" :class="{'on':wapmenushow}" @click="showwapmenu">
+          <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-top"><span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-top"></span></span>
+          <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-bottom"><span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-bottom"></span></span>
+        </div>
+      </div>
       <div class="fl nav-btn amn3">
         <ul class="clear">
           <li class="fl">
@@ -10,13 +16,13 @@
           <li class="fl">
             <span>排行榜<em></em></span>
           </li>
-          <li class="fl">
+          <li class="fl pchide">
             <span>歌单<em></em></span>
           </li>
           <li class="fl">
             <span>歌手<em></em></span>
           </li>
-          <li class="fl">
+          <li class="fl pchide">
             <span>MV<em></em></span>
           </li>
         </ul>
@@ -52,7 +58,7 @@
       </div>
       <div class="nav-search amn3 fr">
         <div class="search-btn" @click="showsearch"></div>
-        <div class="login-btn">登录</div>
+        <div class="login-btn pchide">登录</div>
       </div>
     </nav>
   </div>
@@ -60,6 +66,7 @@
 
 <script>
 import {hotsearch} from "@/api/api"
+import {IsPC} from "@/api/common"
 export default {
   name: 'header-nav',
   data(){
@@ -69,6 +76,7 @@ export default {
       hotlist:[],
       historylist:[],
       searchval:'',
+      wapmenushow:false,
     }
   },
   components:{
@@ -126,7 +134,14 @@ export default {
       this.searchval = data;
     },
     showsearch(){
-      this.checksearch = true;
+      if(IsPC()){
+        //pc
+        this.checksearch = true;
+      }else{
+        //wap
+        
+      }
+      
     },
     closesearch(){
       this.checksearch = false;
@@ -136,6 +151,9 @@ export default {
     },
     hideht(){
       this.showhistory = false;
+    },
+    showwapmenu(){
+      this.wapmenushow = true;
     }
   }
 }
@@ -149,7 +167,7 @@ export default {
     height:70px;
     position:relative;
   }
-  .nav-all .logo{
+  .nav-all .logo .pc{
     background:url(../assets/img/logo.png) left center no-repeat;
     background-size:50px;
     height:70px;
@@ -306,5 +324,111 @@ export default {
   .search-wrap.showhistory .search-input .search-history{
     transform: translateY(-0px);
     opacity:1;
+  }
+  .nav-all .logo .wap{
+    display:none;
+  }
+  @media screen and (max-width:1280px){
+    .pchide{display:none}
+    .nav-all{
+      display:flex;
+      justify-content:space-between;
+    }
+    .nav-all .nav-btn{
+
+    }
+    .search-wrap{
+      width:100%;
+      display:none;
+    }
+    .search-wrap .search-input{
+      width:100%;
+    }
+    .nav-all .logo .pc{
+      display:none;
+    }
+    .nav-all .logo .wap{
+      display:block;
+      width:48px;
+      height:48px;
+    }
+    .ac-gn-menuicon-bread {
+      position: absolute;
+      z-index: 3;
+      top: 9px;
+      left: 9px;
+      width: 30px;
+      height: 30px;
+      -webkit-transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .ac-gn-menuicon-bread .ac-gn-menuicon-bread-top{
+      -webkit-transition: -webkit-transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+      transition: -webkit-transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+      transition: transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+      transition: transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96), -webkit-transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+      -webkit-transform: none;
+      transform: none;
+      z-index: 4;
+    }
+    .ac-gn-menuicon-bread .ac-gn-menuicon-bread-bottom{
+          -webkit-transition: -webkit-transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+    transition: -webkit-transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+    transition: transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+    transition: transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96), -webkit-transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+    -webkit-transform: none;
+    transform: none;
+    }
+    .ac-gn-menuicon-bread-crust {
+      display: block;
+      width: 17px;
+      height: 1px;
+      background: #C62F2F;
+      border-radius: 0.5px;
+      position: absolute;
+      left: 7px;
+      z-index: 1;
+    }
+    .ac-gn-menuicon-bread-crust.ac-gn-menuicon-bread-crust-top{
+      top: 14px;
+      transform: translateY(-3px);
+      transition: transform .1596s cubic-bezier(0.52, 0.16, 0.52, 0.84) .1008s;
+    }
+    .ac-gn-menuicon-bread-crust.ac-gn-menuicon-bread-crust-bottom{
+      bottom:14px;
+      transform: translateY(3px);
+      transition: transform .1596s cubic-bezier(0.52, 0.16, 0.52, 0.84) .1008s;
+    }
+    .wap.on .ac-gn-menuicon-bread-top{
+      transition: transform .3192s cubic-bezier(0.04, 0.04, 0.12, 0.96) .1008s;
+      transform: rotate(45deg);
+    }
+    .wap.on .ac-gn-menuicon-bread-bottom{
+      transition: transform .3192s cubic-bezier(0.04, 0.04, 0.12, 0.96) .1008s;
+      transform: rotate(-45deg);
+    }
+    .wap.on .ac-gn-menuicon-bread-crust.ac-gn-menuicon-bread-crust-top{
+      transition: transform .3192s cubic-bezier(0.04, 0.04, 0.12, 0.96) .1008s;
+      transform: rotate(0deg);
+    }
+    .wap.on .ac-gn-menuicon-bread-crust.ac-gn-menuicon-bread-crust-bottom{
+      transition: transform .1806s cubic-bezier(0.04, 0.04, 0.12, 0.96);
+      transform: none;
+    }
+    .nav-all .nav-btn ul li{
+      height:48px;
+      line-height:48px;
+    }
+    .nav-all{
+      height:48px;
+      max-width:100%;
+    }
+    .nav-search{
+      height:48px;
+    }
+    .nav-search .search-btn{
+      border-right:none;
+      background-size:20px;
+    }
   }
 </style>

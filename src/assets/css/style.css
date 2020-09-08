@@ -28,3 +28,8 @@ ul{list-style: none;padding: 0;margin: 0;}
 .amn6{transition:all ease-in-out .6s 0s;-webkit-transition:all ease-in-out .6s 0s;-moz-transition:all ease-in-out .6s 0s;-o-transition:all ease-in-out .6s 0s;}
 .sdw{-webkit-box-shadow:#efefef 0px 4px 8px;-moz-box-shadow:#efefef 0px 4px 8px;box-shadow:#efefef 0px 4px 8px;}
 /***********/
+@media screen and (max-width:1024px){
+    .pd20{
+      padding:0 0.266667rem;
+    }
+  }
