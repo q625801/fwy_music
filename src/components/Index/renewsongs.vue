@@ -108,6 +108,7 @@ export default {
     height: 80px;
     justify-content: space-evenly;
     padding-left:20px;
+    width: calc(100% - 240px);
 }
 .newsongs-all .newsongs-list .newsongs-info span{
     display:block;
@@ -115,6 +116,10 @@ export default {
     color: #4a4a4a;
     font-weight: 700;
     text-align:left;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .newsongs-all .newsongs-list .newsongs-duration{
     font-size: 15px;
@@ -147,6 +152,7 @@ export default {
   }
   .newsongs-all .newsongs-list .newsongs-info{
     height:1.4rem;
+    width: calc(100% - 4.5rem);
   }
   .newsongs-all .newsongs-list .newsongs-info span{
     font-size:0.186667rem;
@@ -155,6 +161,11 @@ export default {
     height:1.4rem;
     line-height:1.4rem;
     font-size: 0.186667rem;
+    width: 1.2rem;
+  }
+  .newsongs-all .newsongs-list .newsongs-index .newsong-player{
+    height: 1.4rem;
+    background-size: 0.666667rem;
   }
 }
 </style>

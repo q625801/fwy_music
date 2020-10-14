@@ -18,6 +18,7 @@ export const personalized = api + '/personalized'
 export const newsong = api + '/personalized/newsong'
 // ===================音乐url
 export const mp3url = api + '/song/url'
-
+// ===================歌单详情
+export const sddetail = api + '/playlist/detail'
 
 

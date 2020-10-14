@@ -223,7 +223,7 @@ export default {
   width: 100%;
   background: #fff;
   position: fixed;
-  bottom: 0;
+  bottom: -3px;
   right: 0;
   left: 0;
   z-index: 8000;

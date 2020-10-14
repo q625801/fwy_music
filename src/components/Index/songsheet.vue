@@ -2,7 +2,7 @@
   <div class="wrap pd20">
     <h2 class="title">推荐歌单</h2>
     <div class="songsheet-wrap clear">
-      <div class="songsheet-list fl" v-for="(item,index) in songsheetdata" v-if="index < 28">
+      <div class="songsheet-list fl" v-for="(item,index) in songsheetdata" :key="index" v-if="index < 28" @click="gosheetdetail(item.id)">
         <div class="list-img">
           <div class="list-playCount">{{(item.playCount/10000).toString().split(".")[0] + "万"}}</div>
           <img v-lazy="item.picUrl" :key="item.picUrl">
@@ -40,6 +40,9 @@ export default {
       },(err)=>{
 
       })
+    },
+    gosheetdetail(id){
+      this.$router.push({name:'sheetdetail',query: {id:id}})
     }
   }
 }

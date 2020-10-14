@@ -35,3 +35,6 @@ export const seconds = (times) => {
       return seconds;
     }
 }
+export const getLocalTime = (nS) => {
+  return new Date(parseInt(nS)).toLocaleString().replace(new RegExp('/', "g"), "-").replace(/日/g, " ");
+}

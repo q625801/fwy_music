@@ -1,6 +1,6 @@
 <template>
-  <div class="wrap">
-    <nav class="nav-all" :class="{'search-show':checksearch}">
+  <div class="wrap wrap-header sdw">
+    <nav class="nav-all" :class="{'search-show':checksearch,'showhistory':showhistory}">
       <div class="logo fl">
         <div class="pc">Music</div>
         <div class="wap" :class="{'on':wapmenushow}" @click="showwapmenu">
@@ -37,7 +37,7 @@
                 <span>历史搜索</span>
               </div>
               <ul class="tags clear">
-                <li class="fl" v-for="(item,index) in historylist">
+                <li class="fl" v-for="(item,index) in historylist" :key="index">
                   <a class="btn amn3" @click="clickhis(item)">{{item}}</a>
                 </li>
               </ul>
@@ -48,7 +48,7 @@
                 <span>热门搜索</span>
               </div>
               <ul class="tags clear">
-                <li class="fl" v-for="(item,index) in hotlist">
+                <li class="fl" v-for="(item,index) in hotlist" :key="index">
                   <a class="btn amn3" @click="clickhot(item.first)">{{item.first}}</a>
                 </li>
               </ul>
@@ -94,7 +94,6 @@ export default {
   methods:{
     getseach(){
       this.postJson(hotsearch,{},(res) => {
-        console.log(res)
         this.hotlist = res.data.result.hots;
       },(err)=>{
 
@@ -161,11 +160,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .wrap-header{
+    height: 70px;
+    margin-bottom: 20px;
+  }
+
   .nav-all{
     max-width:1280px;
     margin:0 auto;
     height:70px;
-    position:relative;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    margin: auto;
+    background-color: #ffffff;
+    z-index: 999;
   }
   .nav-all .logo .pc{
     background:url(../assets/img/logo.png) left center no-repeat;
@@ -282,6 +293,10 @@ export default {
     transform:translateY(-30px);
     opacity:0;
     background:#ffffff;
+    display: none;
+  }
+  .nav-all.search-show{
+    overflow: hidden;
   }
   .nav-all.search-show .nav-btn{
     opacity:0;
@@ -295,6 +310,9 @@ export default {
   }
   .nav-all.search-show .search-wrap.showhistory{
     z-index:101;
+  }
+  .nav-all.search-show.showhistory{
+    overflow: unset;
   }
   .search-history .search-hot .title span{
     display:block;
@@ -328,14 +346,18 @@ export default {
   .nav-all .logo .wap{
     display:none;
   }
+  .nav-all.search-show .search-wrap .search-input .search-history{
+    display: block;
+  }
   @media screen and (max-width:1280px){
+    .wrap-header{
+      height: 48px;
+      margin-bottom: 0;
+    }
     .pchide{display:none}
     .nav-all{
       display:flex;
       justify-content:space-between;
-    }
-    .nav-all .nav-btn{
-
     }
     .search-wrap{
       width:100%;
