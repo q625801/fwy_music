@@ -1,66 +1,68 @@
 <template>
-  <div class="wrap wrap-header sdw">
-    <nav class="nav-all" :class="{'search-show':checksearch,'showhistory':showhistory}">
-      <div class="logo fl">
-        <div class="pc">Music</div>
-        <div class="wap" :class="{'on':wapmenushow}" @click="showwapmenu">
-          <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-top"><span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-top"></span></span>
-          <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-bottom"><span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-bottom"></span></span>
+  <div class="wrap wrap-header">
+    <div class="header-nav sdw">
+      <nav class="nav-all" :class="{'search-show':checksearch,'showhistory':showhistory}">
+        <div class="logo fl">
+          <div class="pc">Music</div>
+          <div class="wap" :class="{'on':wapmenushow}" @click="showwapmenu">
+            <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-top"><span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-top"></span></span>
+            <span class="ac-gn-menuicon-bread ac-gn-menuicon-bread-bottom"><span class="ac-gn-menuicon-bread-crust ac-gn-menuicon-bread-crust-bottom"></span></span>
+          </div>
         </div>
-      </div>
-      <div class="fl nav-btn amn3">
-        <ul class="clear">
-          <li class="fl">
-            <span>发现音乐<em></em></span>
-          </li>
-          <li class="fl">
-            <span>排行榜<em></em></span>
-          </li>
-          <li class="fl pchide">
-            <span>歌单<em></em></span>
-          </li>
-          <li class="fl">
-            <span>歌手<em></em></span>
-          </li>
-          <li class="fl pchide">
-            <span>MV<em></em></span>
-          </li>
-        </ul>
-      </div>
-      <div class="search-wrap amn3" :class="{'showhistory':showhistory}">
-        <div class="search-input">
-          <input type="text" name="search" class="fl" @focus="showht" @blur="hideht" v-model="searchval"/>
-          <div class="closesearch-btn" @click="closesearch"></div>
-          <div class="search-history amn3 sdw">
-            <div class="search-hot" v-if="historylist.length > 0">
-              <div class="title flex-row">
-                <span>历史搜索</span>
+        <div class="fl nav-btn amn3">
+          <ul class="clear">
+            <li class="fl">
+              <span>发现音乐<em></em></span>
+            </li>
+            <li class="fl">
+              <span>排行榜<em></em></span>
+            </li>
+            <li class="fl pchide">
+              <span>歌单<em></em></span>
+            </li>
+            <li class="fl">
+              <span>歌手<em></em></span>
+            </li>
+            <li class="fl pchide">
+              <span>MV<em></em></span>
+            </li>
+          </ul>
+        </div>
+        <div class="search-wrap amn3" :class="{'showhistory':showhistory}">
+          <div class="search-input">
+            <input type="text" name="search" class="fl" @focus="showht" @blur="hideht" v-model="searchval"/>
+            <div class="closesearch-btn" @click="closesearch"></div>
+            <div class="search-history amn3 sdw">
+              <div class="search-hot" v-if="historylist.length > 0">
+                <div class="title flex-row">
+                  <span>历史搜索</span>
+                </div>
+                <ul class="tags clear">
+                  <li class="fl" v-for="(item,index) in historylist" :key="index">
+                    <a class="btn amn3" @click="clickhis(item)">{{item}}</a>
+                  </li>
+                </ul>
               </div>
-              <ul class="tags clear">
-                <li class="fl" v-for="(item,index) in historylist" :key="index">
-                  <a class="btn amn3" @click="clickhis(item)">{{item}}</a>
-                </li>
-              </ul>
-            </div>
 
-            <div class="search-hot">
-              <div class="title flex-row">
-                <span>热门搜索</span>
+              <div class="search-hot">
+                <div class="title flex-row">
+                  <span>热门搜索</span>
+                </div>
+                <ul class="tags clear">
+                  <li class="fl" v-for="(item,index) in hotlist" :key="index">
+                    <a class="btn amn3" @click="clickhot(item.first)">{{item.first}}</a>
+                  </li>
+                </ul>
               </div>
-              <ul class="tags clear">
-                <li class="fl" v-for="(item,index) in hotlist" :key="index">
-                  <a class="btn amn3" @click="clickhot(item.first)">{{item.first}}</a>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
-      </div>
-      <div class="nav-search amn3 fr">
-        <div class="search-btn" @click="showsearch"></div>
-        <div class="login-btn pchide">登录</div>
-      </div>
-    </nav>
+        <div class="nav-search amn3 fr">
+          <div class="search-btn" @click="showsearch"></div>
+          <div class="login-btn pchide">登录</div>
+        </div>
+      </nav>
+    </div>
   </div>
 </template>
 
@@ -162,13 +164,8 @@ export default {
 <style scoped>
   .wrap-header{
     height: 70px;
-    margin-bottom: 20px;
   }
-
-  .nav-all{
-    max-width:1280px;
-    margin:0 auto;
-    height:70px;
+  .header-nav{
     position: fixed;
     width: 100%;
     left: 0;
@@ -177,6 +174,12 @@ export default {
     margin: auto;
     background-color: #ffffff;
     z-index: 999;
+  }
+  .nav-all{
+    max-width:1280px;
+    margin:0 auto;
+    height:70px;
+    
   }
   .nav-all .logo .pc{
     background:url(../assets/img/logo.png) left center no-repeat;

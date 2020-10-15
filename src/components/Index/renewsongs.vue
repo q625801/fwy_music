@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap pd20">
+  <div class="wrap wrap-index-qt pd20">
     <h2 class="title">推荐新歌曲</h2>
     <div class="newsongs-all clear">
         <div class="newsongs-list amn3 sdw clear" v-for="(item,index) in newsongdata" :key="index" :class="index%2 == 0 ? 'fl' : 'fr'">

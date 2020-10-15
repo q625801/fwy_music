@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import mixin from './api/mixin'
+import store from "@/store/index.js"
 import '@/assets/css/reset.css'
 import '@/assets/js/flexible.debug.js'
 import '@/assets/js/flexible_css.debug.js'
@@ -11,6 +12,7 @@ import '@/assets/css/style.css'
 import VueLazyload from 'vue-lazyload'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
 
 Vue.config.productionTip = false
 
@@ -22,10 +24,12 @@ Vue.use(VueLazyload, {//图片懒加载插件
 });
 
 Vue.use(ElementUI);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   components: { App },
+  store,
   template: '<App/>'
 })

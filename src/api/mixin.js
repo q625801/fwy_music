@@ -1,5 +1,5 @@
 import {post_json} from "@/api/apiConfig";
-
+import store from "@/store/index.js"
 let mixin = {
     data:()=>{
         return {
@@ -8,12 +8,14 @@ let mixin = {
     },
     methods:{
         postJson(url, params, successCallback, errorCallback){
+            store.state.loadding = true;
             post_json(url, params)
             .then(res => this.successDataFun(res, successCallback, errorCallback,url))
             .catch(err => this.failDataFun(err, errorCallback));
         },
 
         successDataFun(res, successCallback,url){
+            store.state.loadding = false;
             let ret = res.data
 
             if(successCallback){
@@ -33,6 +35,7 @@ let mixin = {
             // }
         },
         failDataFun(err, errorCallback){
+            store.state.loadding = false;
             let ret = err.data
             if(errorCallback){
                 errorCallback(err)

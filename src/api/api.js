@@ -20,5 +20,11 @@ export const newsong = api + '/personalized/newsong'
 export const mp3url = api + '/song/url'
 // ===================歌单详情
 export const sddetail = api + '/playlist/detail'
+// ===================歌单收藏者
+export const subscribers = api + '/playlist/subscribers'
+// ===================相关歌单推荐
+export const related = api + '/related/playlist'
+
+
 
 

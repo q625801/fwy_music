@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap pd20">
+  <div class="wrap wrap-index-qt pd20">
     <h2 class="title">推荐歌单</h2>
     <div class="songsheet-wrap clear">
       <div class="songsheet-list fl" v-for="(item,index) in songsheetdata" :key="index" v-if="index < 28" @click="gosheetdetail(item.id)">

@@ -52,6 +52,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.banner{
+  margin:30px 0;
+}
 .banner .swiper-container{
   position:relative;
   z-index:100;
@@ -70,6 +73,8 @@ export default {
   background-color:rgb(198,47,47);
 }
 @media screen and (max-width:1280px){
-
+  .banner{
+    margin: 0;
+  }
 }
 </style>
