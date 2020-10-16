@@ -12,19 +12,25 @@ export const banner = api + '/banner' // 测试
 
 // ===================导航
 export const hotsearch = api + '/search/hot'
+
 // ===================推荐歌单
 export const personalized = api + '/personalized'
 // ===================推荐新歌曲
 export const newsong = api + '/personalized/newsong'
-// ===================音乐url
-export const mp3url = api + '/song/url'
+
 // ===================歌单详情
 export const sddetail = api + '/playlist/detail'
 // ===================歌单收藏者
 export const subscribers = api + '/playlist/subscribers'
+
 // ===================相关歌单推荐
 export const related = api + '/related/playlist'
 
+// ===================音乐url
+export const mp3url = api + '/song/url'
+// ===================获取歌曲详情
+export const songsdetail = api + '/song/detail'
 
-
+// ===================歌单评论
+export const songdetaiilcomment = api + '/comment/playlist'
 

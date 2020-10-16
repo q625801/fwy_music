@@ -24,7 +24,6 @@
 
 <script>
 import {newsong} from "@/api/api"
-import {minutes,seconds} from "@/api/common"
 export default {
   name: 'songsheet',
   data(){
@@ -47,9 +46,7 @@ export default {
 
       })
     },
-    playtime(time){
-        return minutes(time) + ":" + seconds(time)
-    }
+    
   }
 }
 </script>

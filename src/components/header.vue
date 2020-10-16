@@ -11,7 +11,7 @@
         </div>
         <div class="fl nav-btn amn3">
           <ul class="clear">
-            <li class="fl">
+            <li class="fl" @click="goindex()">
               <span>发现音乐<em></em></span>
             </li>
             <li class="fl">
@@ -155,6 +155,9 @@ export default {
     },
     showwapmenu(){
       this.wapmenushow = true;
+    },
+    goindex(){
+      this.$router.push("/")
     }
   }
 }

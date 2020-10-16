@@ -27,13 +27,15 @@
               </div>
             </div>
           </div>
+          <songlist :songarr="detailinfo.trackIds"></songlist>
+          <sheetcomment :sheetcommentId="sheetId"></sheetcomment>
         </div>
         <div class="sd-right fr">
           <div class="sd-box">
             <div class="title">喜欢这个歌单的人</div>
             <div class="likeuser clear">
               <div class="user-headimg fl" v-for="(item,index) in subscribersdata" :key="index">
-                <img v-lazy="item.avatarUrl + '?param=150y150'" :key="item.avatarUrl + '?param=150y150'" :alt="item.nickname" :title="item.nickname"/>
+                <img v-lazy="item.avatarUrl + '?param=100y100'" :key="item.avatarUrl + '?param=150y150'" :alt="item.nickname" :title="item.nickname"/>
               </div>
             </div>
           </div>
@@ -42,7 +44,7 @@
             <div class="slrecommend clear">
               <div v-for="(item,index) in relateddata" :key="index" class="slrecommend-list clear" @click="gosheetdetail(item.id)">
                 <div class="slrecommend-img fl">
-                  <img v-lazy="item.coverImgUrl + '?param=150y150'" :key="item.coverImgUrl + '?param=150y150'" :alt="item.name" :title="item.name"/>
+                  <img v-lazy="item.coverImgUrl + '?param=100y100'" :key="item.coverImgUrl + '?param=150y150'" :alt="item.name" :title="item.name"/>
                 </div>
                 <div class="slrecommend-content fl">
                   <div class="title">{{item.name}}</div>
@@ -60,6 +62,8 @@
 <script>
 import {sddetail,subscribers,related} from "@/api/api"
 import {getLocalTime} from "@/api/common"
+import songlist from "@/components/sheetdetail/songlist"
+import sheetcomment from "@/components/sheetdetail/sheetcomment"
 export default {
   name: 'sheetdetail',
   data () {
@@ -68,15 +72,18 @@ export default {
       creator:'',
       subscribersdata:'',
       relateddata:'',
+      sheetId:'',
     }
   },
   components:{
-    
+    songlist, //歌曲列表
+    sheetcomment,//评论列表
   },
   created(){
     this.getsddetail();
     this.getsubscribers();
     this.getrelated();
+    this.sheetId = this.$route.query.id;
   },
   mounted(){
     
@@ -89,7 +96,6 @@ export default {
           that.detailinfo = res.data.playlist;
           that.detailinfo.createTime = getLocalTime(res.data.playlist.createTime).split(" ")[0];
           that.creator = res.data.playlist.creator;
-          console.log(res.data.playlist.trackIds)
         }
       },(err)=>{
 
@@ -134,7 +140,7 @@ export default {
 .container{
   max-width:1280px;
   width:100%;
-  margin:30px auto 0;
+  margin:30px auto 30px;
 }
 .sd-wrap .sd-left{
     width: 75%;

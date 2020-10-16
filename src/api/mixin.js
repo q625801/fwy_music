@@ -1,5 +1,6 @@
 import {post_json} from "@/api/apiConfig";
 import store from "@/store/index.js"
+import { minutes, seconds } from "@/api/common"
 let mixin = {
     data:()=>{
         return {
@@ -7,15 +8,20 @@ let mixin = {
         }
     },
     methods:{
-        postJson(url, params, successCallback, errorCallback){
-            store.state.loadding = true;
+        postJson(url, params, successCallback, errorCallback,isloading = true){
+            if (isloading){
+                store.state.loadding = true;
+            }
+            
             post_json(url, params)
-            .then(res => this.successDataFun(res, successCallback, errorCallback,url))
-            .catch(err => this.failDataFun(err, errorCallback));
+                .then(res => this.successDataFun(res, successCallback, isloading))
+                .catch(err => this.failDataFun(err, errorCallback, isloading));
         },
 
-        successDataFun(res, successCallback,url){
-            store.state.loadding = false;
+        successDataFun(res, successCallback, isloading){
+            if (isloading) {
+                store.state.loadding = false;
+            }
             let ret = res.data
 
             if(successCallback){
@@ -34,8 +40,10 @@ let mixin = {
             //     break
             // }
         },
-        failDataFun(err, errorCallback){
-            store.state.loadding = false;
+        failDataFun(err, errorCallback, isloading){
+            if (isloading) {
+                store.state.loadding = false;
+            }
             let ret = err.data
             if(errorCallback){
                 errorCallback(err)
@@ -51,6 +59,9 @@ let mixin = {
             //     }
             //     break
             // }
+        },
+        playtime(time) {
+            return minutes(time) + ":" + seconds(time)
         }
     }
 }
