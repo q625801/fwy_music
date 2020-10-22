@@ -227,6 +227,7 @@ export default {
   right: 0;
   left: 0;
   z-index: 8000;
+  display: none;
 }
 .player-bar{
   height: 72px;

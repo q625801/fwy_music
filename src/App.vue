@@ -30,8 +30,13 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  padding-bottom:72px;
+  padding-bottom:20px;
   min-height: 100%;
   background: rgb(245, 245, 245);
+}
+@media screen and (max-width:1280px){
+    #app{
+      background: #ffffff;
+    }
 }
 </style>

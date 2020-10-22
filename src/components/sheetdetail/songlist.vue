@@ -1,5 +1,13 @@
 <template>
     <div class="wrap songlist-wrap">
+        <div class="songlist-playall">
+            <div class="playall-por">
+                <span>+ 收藏({{subscribnum}})</span>
+            </div>
+            <div class="playall-por plauall-btn">
+                <span>播放全部</span>
+            </div>
+        </div>
         <div class="songlist-all">
             <table class="songlist-table">
                 <thead>
@@ -45,6 +53,15 @@
                                 <p class="ellipsis">{{playtime(item.dt)}}</p>
                             </div>
                         </td>
+                        <td class="td-wap">
+                            <div class="wap-songlist">
+                                <div class="name">{{item.name}}</div>
+                                <div class="author-album">
+                                    <span v-for="(item1,index1) in item.ar" :key="index1">{{index1 > 0 ? (' / ' + item1.name) : item1.name}}</span>
+                                    <span> - {{item.al.name}}</span>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -58,6 +75,7 @@
 
 <script>
 import {songsdetail} from "@/api/api"
+import {numchangecn} from "@/api/common"
 export default {
   name: 'songlist',
   data(){
@@ -71,16 +89,18 @@ export default {
       songlistdata:[],
       songmoreloading:false,
       showsongmore:false,
+      subscribnum:'',
     }
   },
   props:[
     'songarr',
+    'stdetaildata',
   ],
   components:{
     
   },
   mounted(){
-    
+
   },
   computed:{
     
@@ -123,13 +143,30 @@ export default {
         })
         this.getsongdata(newArr);
         // console.log(prevNo,this.pageArr.ArrNo,this.pageArr.ArrSize,this.pagelength)
-    }
+    },
+    subscrib(num){
+        var reg = new RegExp('[\u4e00-\u9fa5]+$','g');
+        var card = ''
+        var numValue = numchangecn(num)
+        if(numValue.match(/[\u4e00-\u9fa5]/g)){
+            card = numValue.match(/[\u4e00-\u9fa5]/g).join("");
+        }
+        if(numValue.split(".")){
+            this.subscribnum = numValue.split(".")[0] + card
+        }else{
+            this.subscribnum = numValue + card
+        }
+        
+    },
   },
   watch:{
     songarr(arr){ //监听父组件传过来的 歌曲数组
         this.songlistarr = arr;
         this.pagelength = this.songlistarr.length;
         this.getmoresong();
+    },
+    stdetaildata(data){
+        this.subscrib(data.subscribedCount)
     }
   }
 }
@@ -256,5 +293,88 @@ table {
     color: #C62F2F;
     padding:20px 0;
     cursor: pointer;
+}
+.songlist-table tbody tr .td-wap{
+    display: none;
+}
+.songlist-playall{
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.playall-por{
+    color: #fff;
+    background: #C62F2F;
+    margin-right: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 9px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    float: right;
+    font-size: 16px;
+}
+.playall-por.plauall-btn span{
+    background: url("../../assets/img/player-btn2.png") left center no-repeat;
+    background-size: 25px;
+    padding-left: 28px;
+}
+@media screen and (max-width:1280px){
+    .songlist-wrap{
+        padding: 0 0 0 0;
+    }
+    .songlist-table thead{
+        display: none;
+    }
+    .songlist-table tbody tr .td-name{
+        display: none;
+    }
+    .songlist-table tbody tr .td-artist{
+        display: none;
+    }
+    .songlist-table tbody tr .td-album{
+        display: none;
+    }
+    .songlist-table tbody tr .td-duration{
+        display: none;
+    }
+    .songlist-table tbody tr .td-index{
+        width: 15%;
+        padding: 0;
+    }
+    .songlist-table tbody tr .td-wap{
+        display: block;
+        width: 95%;
+        padding: 0;
+    }
+    .songlist-table tbody tr:nth-child(2n) {
+        background: #ffffff;
+    }
+    .songlist-table tbody tr{
+        height: auto;
+        line-height: initial;
+    }
+    .songlist-table tbody tr:hover{
+        background:#e8e9ed;
+    }
+    .wap-songlist{
+        padding: 0.2rem 0;
+    }
+    .wap-songlist div{
+        line-height: initial;
+    }
+    .wap-songlist .name{
+        font-size: 0.346667rem;
+    }
+    .wap-songlist .author-album span{
+        font-size: 0.24rem;
+    }
+    .playall-por{
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    .playall-por.plauall-btn span{
+        background-size: 0.4rem;
+        padding-left: 0.4rem;
+    }
 }
 </style>

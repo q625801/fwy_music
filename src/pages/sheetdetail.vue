@@ -6,6 +6,7 @@
           <div class="left-top clear">
             <div class="left-img fl">
               <img v-lazy="detailinfo.coverImgUrl" :key="detailinfo.coverImgUrl" :alt="detailinfo.name" :title="detailinfo.name"/>
+              <!-- <img src="../assets/img/loading.gif"/> -->
             </div>
             <div class="left-content fl">
               <div class="title">
@@ -16,7 +17,7 @@
                   <img :alt="creator.nickname" :title="creator.nickname" :src="creator.avatarUrl"/>
                 </div>
                 <div class="createinfo-name wz fl">{{creator.nickname}}</div>
-                <div class="wz fl">{{detailinfo.createTime}}创建</div>
+                <div class="wz fl createinfo-data">{{detailinfo.createTime}}创建</div>
               </div>
               <div class="sd-tag clear">
                 <div class="fl ttl" v-if="detailinfo.tags">标签：</div>
@@ -27,7 +28,7 @@
               </div>
             </div>
           </div>
-          <songlist :songarr="detailinfo.trackIds"></songlist>
+          <songlist :songarr="detailinfo.trackIds" :stdetaildata="detailinfo"></songlist>
         </div>
         <div class="sd-right fr">
           <sheetlike :sheetcommentId="sheetId"></sheetlike>
@@ -80,9 +81,6 @@ export default {
 
       })
     },
-    gosheetdetail(id){
-      this.$router.push({name:'sheetdetail',query: {id:id}})
-    },
   },
   watch:{
     $route (to, from){
@@ -100,11 +98,12 @@ export default {
   margin:30px auto 30px;
 }
 .sd-wrap .sd-left{
-    width: 70%;
-    box-sizing: border-box;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
+  width: 70%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  min-height: 1370px;
 }
 .sd-wrap .sd-right{
     width: 28%;
@@ -114,15 +113,18 @@ export default {
     height: 200px;
     border-radius: 5px;
     overflow: hidden;
-    display: flex;
-    flex-flow: wrap;
-    align-content: center;
-    justify-content: center;
+    position: relative;
 }
 .sd-left .left-top .left-img img{
     display: block;
     max-width: 100%;
     max-height: 100%;
+    position:absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
 }
 .sd-left .left-top .left-content{
     padding-left: 40px;
@@ -184,6 +186,57 @@ export default {
   display:-webkit-box;
   -webkit-box-orient:vertical;
   -webkit-line-clamp:3;
+}
+@media screen and (max-width:1280px){
+  .container{
+    margin: 0 auto 0;
+  }
+  .sd-wrap .sd-left{
+    width: 100%;
+    float: unset;
+    padding:0;
+    min-height: auto;
+  }
+  .sd-left .left-top{
+    padding: 0.4rem 0.4rem 0.4rem 0.4rem;
+  }
+  .sd-left .left-top .left-img{
+    width: 4rem;
+    height: 4rem;
+  }
+  .sd-left .left-top .left-content .title{
+    font-size: 12px;
+    line-height: 0.48rem;
+    padding-top: 0.133333rem;
+  }
+  .sd-left .left-top .left-content{
+    width: calc(100% - 4rem);
+    padding-left: 0.4rem;
+  }
+  .createinfo .createinfo-avatar{
+    width: 0.666667rem;
+    height: 0.666667rem;
+  }
+  .createinfo .wz{
+    font-size: 12px;
+    height: 0.666667rem;
+    line-height: 0.666667rem;
+    margin-left: 0.266667rem;
+  }
+  .createinfo .createinfo-data{
+    display: none;
+  }
+  .sd-tag{
+    display: none;
+  }
+  .sd-description{
+    width: 100%;
+    line-height: 0.466667rem;
+    padding-top: 0.266667rem;
+  }
+  .sd-wrap .sd-right{
+    width: 100%;
+  }
 }
 
 </style>

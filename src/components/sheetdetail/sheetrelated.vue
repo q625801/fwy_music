@@ -50,6 +50,9 @@ export default {
 
       })
     },
+    gosheetdetail(id){
+      this.$router.push({name:'sheetdetail',query: {id:id}})
+    },
   },
   watch:{
     sheetcommentId(Id){
@@ -122,5 +125,10 @@ export default {
 }
 .slrecommend-list:hover .slrecommend-content .title{
   color: #C62F2F;
+}
+@media screen and (max-width:1280px){
+    .sd-box{
+        display: none;
+    }
 }
 </style>
