@@ -159,7 +159,7 @@ export default {
     color: #C62F2F;
 }
 .sdcomment-all .slrecommend{
-    max-height: 566px;
+    max-height: 520px;
     overflow-y: auto;
     padding: 0 15px;
 }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/pages/Index'
 import sheetdetail from '@/pages/sheetdetail'
-
+import userhome from '@/pages/userhome'
 Vue.use(Router)
 
 export default new Router({
@@ -16,6 +16,11 @@ export default new Router({
       path: '/sheetdetail',
       name: 'sheetdetail',
       component: sheetdetail
+    },
+    {
+      path: '/userhome',
+      name: 'userhome',
+      component: userhome
     },
   ]
 })

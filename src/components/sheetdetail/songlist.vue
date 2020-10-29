@@ -151,10 +151,10 @@ export default {
         if(numValue.match(/[\u4e00-\u9fa5]/g)){
             card = numValue.match(/[\u4e00-\u9fa5]/g).join("");
         }
-        if(numValue.split(".")){
+        if(numValue.split(".").length > 1){
             this.subscribnum = numValue.split(".")[0] + card
         }else{
-            this.subscribnum = numValue + card
+            this.subscribnum = numValue
         }
         
     },

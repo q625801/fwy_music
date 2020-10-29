@@ -86,7 +86,7 @@ export default {
 }
 @media screen and (max-width:1280px){
   .sd-box{
-    padding: 0 0.4rem 0 0.4rem;
+    padding: 0.4rem 0.4rem 0 0.4rem;
     margin-bottom: 0;
     position: relative;
   }
@@ -109,11 +109,12 @@ export default {
   .sd-box .subscribnum{
     position: absolute;
     right: 0.4rem;
-    top: 0.306667rem;
+    top: 0.706667rem;
     font-size: 0.346667rem;
     padding-right: 0.6rem ;
     background: url("../../assets/img/arror.png") right center no-repeat;
     background-size: 0.6rem;
+    display: block;
   }
 }
 </style>
