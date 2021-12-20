@@ -2,20 +2,21 @@
   <div class="wrap wrap-index-qt pd20">
     <h2 class="title">推荐新歌曲</h2>
     <div class="newsongs-all clear">
-        <div class="newsongs-list amn3 sdw clear" v-for="(item,index) in newsongdata" :key="index" :class="index%2 == 0 ? 'fl' : 'fr'">
-            <div class="fl newsongs-index">
-                <span>{{index+1 >= 10 ? index+1:"0" + (index+1)}}</span>
-                <div class="newsong-player"></div>
+        <div class="newsongs-list amn3 sdw clear" v-for="(item,index) in newsongdata" :key="index" :class="[index%2 == 0 ? 'fl' : 'fr']" @click="audioPlay(item)">
+            <div class="fl newsongs-index" :class="{'on':item.id == $store.state.audioInfo.SongInfo.SongId,'btnon':$store.state.audioInfo.audioPlayBtn && item.id == $store.state.audioInfo.SongInfo.SongId}">
+              <span>{{index+1 >= 10 ? index+1:"0" + (index+1)}}</span>
+              <div class="newsong-player"></div>
             </div>
             <div class="fl newsongs-img">
-                <img v-lazy="item.picUrl" :key="item.picUrl"/>
+              <img v-lazy="item.picUrl" :key="item.picUrl"/>
             </div>
             <div class="fl newsongs-info">
-                <span>{{item.name}}</span>
-                <span>{{item.song.artists[0].name}}</span>
+              <span>{{item.name}}</span>
+              <span>{{SongArtists(item.song.artists)}}</span>
             </div>
-            <div class="fr newsongs-duration">
-                {{playtime(item.song.bMusic.playTime)}}
+            <div class="fr newsongs-duration" :class="{'on':item.id == $store.state.audioInfo.SongInfo.SongId}">
+              <span class="time">{{playtime(item.song.bMusic.playTime)}}</span>
+              <div class="effect"></div>
             </div>
         </div>
     </div>
@@ -46,7 +47,29 @@ export default {
 
       })
     },
-    
+    audioPlay(SongInfo){
+      let data = {
+        SongId:SongInfo.id,
+        SongName:SongInfo.name,
+        SongPic:SongInfo.picUrl,
+        SongArtists:this.SongArtists(SongInfo.song.artists)
+      }
+      this.$store.commit('setSongInfo',data)
+    }
+  },
+  computed:{
+    SongArtists(){
+      return (data) => {
+        if(data.length == 1){
+          return data[0].name
+        }else{
+          let name = data.map(obj => {
+            return obj.name
+          }).join(' / ')
+          return name
+        }
+      }
+    }
   }
 }
 </script>
@@ -99,6 +122,16 @@ export default {
 .newsongs-all .newsongs-list:hover .newsongs-index .newsong-player{
     display:block;
 }
+.newsongs-all .newsongs-list .newsongs-index.on span{
+    display:none;
+}
+.newsongs-all .newsongs-list .newsongs-index.on .newsong-player{
+    display:block;
+}
+.newsongs-all .newsongs-list .newsongs-index.btnon .newsong-player{
+    background:url(../../assets/img/player-stop.png) center no-repeat;
+    background-size:30px;
+}
 .newsongs-all .newsongs-list .newsongs-info{
     display: flex;
     flex-direction: column;
@@ -119,12 +152,26 @@ export default {
     text-overflow: ellipsis;
 }
 .newsongs-all .newsongs-list .newsongs-duration{
+  position:relative;
+}
+.newsongs-all .newsongs-list .newsongs-duration .time{
     font-size: 15px;
     color: #4a4a4a;
     font-weight: 700;
     line-height: 80px;
     width: 70px;
     height: 80px;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect{
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  margin-top: -5px;
+  width: 10px;
+  height: 10px;
+  background: url(https://y.qq.com/mediastyle/yqq/img/wave.gif?max_age=2592000) 0 0 no-repeat;
+  text-indent: -99px;
+  overflow: hidden;
 }
 @media screen and (max-width:1280px){
   .title{
@@ -154,11 +201,12 @@ export default {
   .newsongs-all .newsongs-list .newsongs-info span{
     font-size:0.186667rem;
   }
-  .newsongs-all .newsongs-list .newsongs-duration{
+  .newsongs-all .newsongs-list .newsongs-duration .time{
     height:1.4rem;
     line-height:1.4rem;
     font-size: 0.186667rem;
     width: 1.2rem;
+    display:block;
   }
   .newsongs-all .newsongs-list .newsongs-index .newsong-player{
     height: 1.4rem;

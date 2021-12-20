@@ -1,12 +1,12 @@
 <template>
-  <div class="wrap audio-wrap sdwa">
+  <div class="wrap audio-wrap sdwa" v-if="$store.state.audioInfo.audioFlag">
     <div class="player-bar">
       <div class="avatar">
-        <img alt="nicemusic" src="https://p2.music.126.net/vYIaYeY0t8sZvmycbmjOSQ==/109951165287432367.jpg">
+        <img alt="nicemusic" :src="SongPic" :title="SongName">
       </div>
       <div class="info">
-        <h2 class="ellipsis">一天</h2>
-        <p class="ellipsis">蘇山海</p>
+        <h2 class="ellipsis">{{SongName}}</h2>
+        <p class="ellipsis">{{SongArtists}}</p>
       </div>
       <div class="player-btn clear">
         <span class="player-prev fl"></span>
@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-          <p class="duration-time"> {{(parseInt(audioduration / 60, 10) <= 9 ? '0' + parseInt(audioduration / 60, 10) : parseInt(audioduration / 60, 10)) + ':' + parseInt(audioduration % 60)}} </p>
+          <p class="duration-time"> {{audioduration ? ((parseInt(audioduration / 60, 10) <= 9 ? '0' + parseInt(audioduration / 60, 10) : parseInt(audioduration / 60, 10)) + ':' + (parseInt(audioduration % 60) <= 9 ? '0' + parseInt(audioduration % 60) : parseInt(audioduration % 60))) : ''}} </p>
       </div>
       <div class="volume-wrap">
         <div class="volume-yl"></div>
@@ -46,11 +46,11 @@
 <script>
 import {mp3url} from "@/api/api"
 import {IsPC} from "@/api/common"
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'banner',
   data(){
     return {
-      audiosrc:'',
       value2:50,
       audiostate:true,
       audioduration:'',
@@ -59,18 +59,31 @@ export default {
       touch:{},
       checkplayfirst:true,
       is_yuanmousedown:false,
+
+      SongName:'',
+      SongPic:'',
+      SongArtists:'',
     }
   },
   components:{
     
   },
   created(){
-    this.getmusicurl(33911781);
+    // this.getmusicurl(1901371647);
   },
   methods:{
+    init(){
+      //重置音频属性
+      this.audiostate = true
+      this.audioduration = ''
+      this.playTime = '00:00'
+      this.progressWidth = ''
+      this.touch = {}
+      this.checkplayfirst = true
+      this.is_yuanmousedown = false
+    },
     getmusicurl(id){
       this.postJson(mp3url,{id:id},(res) => {
-          this.audiosrc = res.data.data[0].url;
           this.$refs.audio.src = res.data.data[0].url;
           this.audioTimeUpdate();//添加监听事件
       },(err) => {
@@ -91,6 +104,7 @@ export default {
         that.audioduration = that.$refs.audio.duration;
         if(that.checkplayfirst){
           that.checkplayfirst = false;
+          that.$store.commit('setAudioPlayBtn',true)
           audio.play();
         }
       });
@@ -136,12 +150,17 @@ export default {
       if (audio.paused) {
         // 暂停中
         this.$refs.audio.play();
+        this.$store.commit('setAudioPlayBtn',true)
       } else {
         // 播放中
         this.$refs.audio.pause();
+        this.$store.commit('setAudioPlayBtn',false)
       }
     },
     clickBg (e) {
+      if(!this.audioduration){
+        return
+      }
       this.touch.width = this.$refs.barBg.clientWidth
       let left = this.$refs.barBg.offsetLeft
       let offsetWidth,that = this
@@ -152,6 +171,9 @@ export default {
       this.changeTime(offsetWidth)
     },
     yuanmousedown(){
+      if(!this.audioduration){
+        return
+      }
       this.is_yuanmousedown = true;
       let offsetWidth;
       let that = this;
@@ -211,6 +233,21 @@ export default {
       this.progressWidth = val
     },
   },
+  computed:{
+    ...mapGetters(['getSongInfo'])
+  },
+  watch:{
+    getSongInfo(newval,oldval){
+      this.init()
+      if(!this.$store.state.audioInfo.audioFlag){
+        this.$store.commit('setAudioFlag',true)
+      }
+      this.getmusicurl(newval.SongId)
+      this.SongName = newval.SongName
+      this.SongPic = newval.SongPic
+      this.SongArtists = newval.SongArtists
+    }
+  },
   destory(){
 
   }
@@ -227,7 +264,6 @@ export default {
   right: 0;
   left: 0;
   z-index: 8000;
-  display: none;
 }
 .player-bar{
   height: 72px;
@@ -328,6 +364,7 @@ export default {
   display: flex;
   align-items: center;
   width:100%;
+  background-color: #cccccc;
 }
 .progress-bar .bar-inner .progress{
   width: 0;
