@@ -16,7 +16,7 @@
                 <div class="createinfo-avatar fl">
                   <img :alt="creator.nickname" :title="creator.nickname" :src="creator.avatarUrl"/>
                 </div>
-                <div class="createinfo-name wz fl">{{creator.nickname}}</div>
+                <div class="createinfo-name wz fl" @click="$router.push('/userhome?uid='+ creator.userId)">{{creator.nickname}}</div>
                 <div class="wz fl createinfo-data">{{detailinfo.createTime}}创建</div>
               </div>
               <div class="sd-tag clear">
@@ -32,7 +32,7 @@
         </div>
         <div class="sd-right fr">
           <sheetlike :sheetcommentId="sheetId"></sheetlike>
-          <sheetrelated :sheetcommentId="sheetId"></sheetrelated>
+          <sheetrelated :sheetcommentId="sheetId" @changesheetcommentId="changesddetail"></sheetrelated>
           <sheetcomment :sheetcommentId="sheetId"></sheetcomment>
         </div>
       </div>
@@ -63,28 +63,30 @@ export default {
     sheetrelated,//相关歌单推荐
   },
   created(){
-    this.getsddetail();
   },
   mounted(){
-    this.sheetId = this.$route.query.id;
+    this.getsddetail(this.$route.query.id);
   },
   methods:{
-    getsddetail(){
-      var that = this;
-      this.postJson(sddetail,{id:that.$route.query.id},(res) => {
+    getsddetail(id){
+      this.sheetId = id;
+      this.postJson(sddetail,{id:id},(res) => {
         if(res.data.code == 200){
-          that.detailinfo = res.data.playlist;
-          that.detailinfo.createTime = getLocalTime(res.data.playlist.createTime).split(" ")[0];
-          that.creator = res.data.playlist.creator;
+          this.detailinfo = res.data.playlist;
+          this.detailinfo.createTime = getLocalTime(res.data.playlist.createTime).split(" ")[0];
+          this.creator = res.data.playlist.creator;
         }
       },(err)=>{
 
       })
     },
+    changesddetail(id){
+      this.getsddetail(id)
+    }
   },
   watch:{
     $route (to, from){
-      this.$router.go(0)
+      this.getsddetail(this.$route.query.id)
     }
   }
 }

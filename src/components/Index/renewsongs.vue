@@ -16,7 +16,12 @@
             </div>
             <div class="fr newsongs-duration" :class="{'on':item.id == $store.state.audioInfo.SongInfo.SongId}">
               <span class="time">{{playtime(item.song.bMusic.playTime)}}</span>
-              <div class="effect"></div>
+              <div class="effect" :class="{'paused':!$store.state.audioInfo.audioPlayBtn && item.id == $store.state.audioInfo.SongInfo.SongId}">
+                <span class="line1"></span>
+                <span class="line2"></span>
+                <span class="line3"></span>
+                <span class="line4"></span>
+              </div>
             </div>
         </div>
     </div>
@@ -26,7 +31,7 @@
 <script>
 import {newsong} from "@/api/api"
 export default {
-  name: 'songsheet',
+  name: 'renewsongs',
   data(){
     return {
       newsongdata:[],
@@ -152,7 +157,8 @@ export default {
     text-overflow: ellipsis;
 }
 .newsongs-all .newsongs-list .newsongs-duration{
-  position:relative;
+    position:relative;
+    width: 70px;
 }
 .newsongs-all .newsongs-list .newsongs-duration .time{
     font-size: 15px;
@@ -162,16 +168,58 @@ export default {
     width: 70px;
     height: 80px;
 }
+.newsongs-all .newsongs-list .newsongs-duration.on .time{
+  display: none;
+}
 .newsongs-all .newsongs-list .newsongs-duration.on .effect{
-  position: absolute;
-  top: 50%;
-  left: 40px;
-  margin-top: -5px;
-  width: 10px;
-  height: 10px;
-  background: url(https://y.qq.com/mediastyle/yqq/img/wave.gif?max_age=2592000) 0 0 no-repeat;
-  text-indent: -99px;
-  overflow: hidden;
+    display: inline-block;
+    height: 30px;
+    line-height: 40px;
+    text-align: center;
+    position: absolute;
+    vertical-align: bottom;
+    width: 100%;
+    top: 20px;
+    right: 20px;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect span{
+    display: inline-block;
+    width: 3px;
+    margin-bottom: 0;
+    background-color: #C62F2F;
+    margin-right: -12px;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect span.line1 {
+    animation: line 0.6s infinite ease-in-out alternate;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect span.line2 {
+    animation: line 0.6s 0.2s infinite ease-in-out alternate;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect span.line3 {
+    animation: line 0.6s 0.4s infinite ease-in-out alternate;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect span.line4 {
+    animation: line 0.6s 0.6s infinite ease-in-out alternate;
+}
+.newsongs-all .newsongs-list .newsongs-duration.on .effect.paused span{
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused;
+}
+@keyframs line {
+    from {
+      height: 0;
+    }
+    to {
+      height: 20px;
+    }
+}
+@-webkit-keyframes line {
+    from {
+      height: 0;
+    }
+    to {
+      height: 20px;
+    }
 }
 @media screen and (max-width:1280px){
   .title{
@@ -201,12 +249,11 @@ export default {
   .newsongs-all .newsongs-list .newsongs-info span{
     font-size:0.186667rem;
   }
-  .newsongs-all .newsongs-list .newsongs-duration .time{
+  .newsongs-all .newsongs-list .newsongs-duration{
     height:1.4rem;
     line-height:1.4rem;
     font-size: 0.186667rem;
     width: 1.2rem;
-    display:block;
   }
   .newsongs-all .newsongs-list .newsongs-index .newsong-player{
     height: 1.4rem;

@@ -176,7 +176,7 @@ export default {
     right: 0;
     margin: auto;
     background-color: #ffffff;
-    z-index: 999;
+    z-index: 9999;
   }
   .nav-all{
     max-width:1280px;

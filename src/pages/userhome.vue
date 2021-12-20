@@ -53,7 +53,7 @@ import {userdetail} from "@/api/api"
 import {getLocalTime} from "@/api/common"
 
 export default {
-  name: 'sheetdetail',
+  name: 'userhome',
   data () {
     return {
       userprofile: '',
@@ -84,9 +84,7 @@ export default {
     },
   },
   watch:{
-    $route (to, from){
-      this.$router.go(0)
-    }
+    
   }
 }
 </script>

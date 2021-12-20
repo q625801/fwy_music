@@ -158,9 +158,22 @@ export default {
         }
         
     },
+    init(){
+        this.songlistarr = []
+        this.pagelength = ''
+        this.pageArr={
+            ArrNo:0,
+            ArrSize:20,
+        }
+        this.songlistdata = []
+        this.songmoreloading = false
+        this.showsongmore = false
+        this.subscribnum = ''
+    }
   },
   watch:{
     songarr(arr){ //监听父组件传过来的 歌曲数组
+        this.init() //组件传值后重置数据
         this.songlistarr = arr;
         this.pagelength = this.songlistarr.length;
         this.getmoresong();

@@ -19,7 +19,7 @@
 <script>
 import {related} from "@/api/api"
 export default {
-  name: 'sheetcomment',
+  name: 'sheettrelated',
   data(){
     return {
       commentId:'',
@@ -39,11 +39,10 @@ export default {
     
   },
   methods:{
-    getrelated(){
-      var that = this;
-      that.postJson(related,{id:that.$route.query.id},(res) => {
+    getrelated(id){
+      this.postJson(related,{id:id},(res) => {
         if(res.data.code == 200){
-          that.relateddata = res.data.playlists
+          this.relateddata = res.data.playlists
           
         }
       },(err) => {
@@ -56,8 +55,8 @@ export default {
   },
   watch:{
     sheetcommentId(Id){
-        this.commentId = Id
-        this.getrelated();
+      this.commentId = Id
+      this.getrelated(Id);
     }
   }
 }

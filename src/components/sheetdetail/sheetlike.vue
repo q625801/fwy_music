@@ -3,7 +3,7 @@
         <div class="title">喜欢这个歌单的人</div>
         <div class="likeuser clear">
             <div class="user-headimg fl" v-for="(item,index) in subscribersdata" :key="index">
-                <img v-lazy="item.avatarUrl + '?param=100y100'" :key="item.avatarUrl + '?param=150y150'" :alt="item.nickname" :title="item.nickname"/>
+                <img v-lazy="item.avatarUrl + '?param=100y100'" :key="item.avatarUrl + '?param=150y150'" @click="$router.push('/userhome?uid='+ item.userId)" :alt="item.nickname" :title="item.nickname"/>
             </div>
             <div v-if="subscribersdata.length == 0">暂无数据</div>
         </div>
@@ -14,7 +14,7 @@
 <script>
 import {subscribers} from "@/api/api"
 export default {
-  name: 'sheetcomment',
+  name: 'sheetlike',
   data(){
     return {
       commentId:'',
@@ -34,12 +34,10 @@ export default {
     
   },
   methods:{
-    getsubscribers(){
-      var that = this;
-      that.postJson(subscribers,{id:that.$route.query.id},(res) => {
+    getsubscribers(id){
+      this.postJson(subscribers,{id:id},(res) => {
         if(res.data.code == 200){
-          that.subscribersdata = res.data.subscribers
-          
+          this.subscribersdata = res.data.subscribers
         }
       },(err) => {
 
@@ -49,7 +47,7 @@ export default {
   watch:{
     sheetcommentId(Id){
         this.commentId = Id
-        this.getsubscribers();
+        this.getsubscribers(Id);
     }
   }
 }

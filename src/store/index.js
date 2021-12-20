@@ -7,6 +7,7 @@ const store = new Vuex.Store({
     state:{
         loadding: false,//加载
 
+        //播放器
         audioInfo:{
             audioFlag:false,//是否显示音频播放器
             audioPlayBtn:false,//播放器开始按钮状态
@@ -15,15 +16,20 @@ const store = new Vuex.Store({
                 SongName:'',
                 SongPic:'',
                 SongArtists:''
-            }
+            },
+            SongList:[]
         },
+        //播放器end
     },
     getters:{
+        //播放器
         getSongInfo:state => {
             return state.audioInfo.SongInfo
         }
+        //播放器end
     },
     mutations:{ //this.$store.commit('setSongId','')
+        //播放器
         setAudioFlag(state,data){
             state.audioInfo.audioFlag = data
         },
@@ -36,6 +42,7 @@ const store = new Vuex.Store({
             }
             state.audioInfo.SongInfo = data
         }
+        //播放器end
     }
 })
 

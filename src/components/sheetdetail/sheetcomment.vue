@@ -8,7 +8,7 @@
                 </div>
                 <div class="slrecommend-content fl">
                     <div class="title-date clear">
-                        <div class="title fl">{{item.user.nickname}}</div>
+                        <div class="title fl" @click="$router.push('/userhome?uid='+ item.user.userId)">{{item.user.nickname}}</div>
                         <div class="date fl">{{getdatacn(item.time).split(" ")[0]}}</div>
                     </div>
                     <div class="comment-content">
@@ -100,7 +100,6 @@ export default {
 }
 .slrecommend-list{
   margin-bottom: 20px;
-  cursor: pointer;
 }
 .slrecommend-list:last-child{
     margin-bottom: 0;
@@ -130,6 +129,7 @@ export default {
   text-overflow: ellipsis;
   font-weight: bold;
   font-size: 14px;
+  cursor: pointer;
 }
 .slrecommend-list .slrecommend-content .date{
   font-size: 12px;
