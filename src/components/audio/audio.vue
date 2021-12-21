@@ -36,11 +36,11 @@
       <div class="bfqbox-wrap clear">
         <span class="bflx suiji fl"></span>
         <span class="fl text">词</span>
-        <span class="fl list"></span>
+        <span class="fl list" @click="playlistflag = !playlistflag"></span>
       </div>
     </div>
     <audio ref="audio">您的浏览器不支持 audio 标签。</audio>
-    <playlist></playlist>
+    <playlist v-show="playlistflag"></playlist>
   </div>
 </template>
 
@@ -66,6 +66,7 @@ export default {
       SongName:'',
       SongPic:'',
       SongArtists:'',
+      playlistflag:false,
     }
   },
   components:{
@@ -91,7 +92,7 @@ export default {
           this.audioTimeUpdate();//添加监听事件
       },(err) => {
 
-      })
+      },false)
     },
     audioTimeUpdate () {
       let audio  = this.$refs.audio;
@@ -151,12 +152,8 @@ export default {
     audioplay(){
       let audio = this.$refs.audio;
       if (audio.paused) {
-        // 暂停中
-        audio.play();
         this.$store.commit('setAudioPlayBtn',true)
       } else {
-        // 播放中
-        audio.pause();
         this.$store.commit('setAudioPlayBtn',false)
       }
     },
@@ -251,7 +248,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(['getSongInfo','getSongList'])
+    ...mapGetters(['getSongInfo','getSongList','getAudioPlayBtn'])
   },
   watch:{
     getSongInfo(newval,oldval){
@@ -264,6 +261,15 @@ export default {
       this.SongPic = newval.SongPic
       this.SongArtists = newval.SongArtists
     },
+    getAudioPlayBtn(newval,oldval){
+      if(newval){
+        // 暂停中
+        this.$refs.audio.play();
+      }else{
+        // 播放中
+        this.$refs.audio.pause();
+      }
+    }
   },
   destory(){
 
@@ -470,7 +476,7 @@ export default {
   height:20px;
   background:url(../../assets/img/bflist.png) center no-repeat;
   background-size:20px;
-  
+  cursor: pointer;
 }
 .sdwa{
   box-shadow: #efefef 0px -5px 8px;

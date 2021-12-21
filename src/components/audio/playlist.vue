@@ -4,7 +4,7 @@
             播放列表({{SomgList.length}})
         </div>
         <div class="playlist-listbdc">
-            <div class="listbdc clear" v-for="(item,index) in SomgList" :key="index" @click="$store.commit('setSongInfo',item)">
+            <div class="listbdc clear" v-for="(item,index) in SomgList" :key="index" @click="changeAudioInfo(item)">
                 <span class="fl name" :class="[item.SongId == $store.state.audioInfo.SongInfo.SongId ? ($store.state.audioInfo.audioPlayBtn ? 'on' : 'off') : '']">
                     {{item.SongName}}
                 </span>
@@ -32,7 +32,17 @@ export default {
 
     },
     methods:{
-
+        changeAudioInfo(item){
+            if(this.$store.state.audioInfo.SongInfo.SongId != item.SongId){
+                this.$store.commit('setSongInfo',item)
+            }else{
+                if(this.$store.state.audioInfo.audioPlayBtn){
+                    this.$store.commit('setAudioPlayBtn',false)
+                }else{
+                    this.$store.commit('setAudioPlayBtn',true)
+                }
+            }
+        }
     },
     computed:{
         ...mapGetters(['getSongList'])
