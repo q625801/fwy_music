@@ -17,7 +17,7 @@ const store = new Vuex.Store({
                 SongPic:'',
                 SongArtists:''
             },
-            SongList:[]
+            SongList:[]//播放列表数据
         },
         //播放器end
     },
@@ -25,6 +25,9 @@ const store = new Vuex.Store({
         //播放器
         getSongInfo:state => {
             return state.audioInfo.SongInfo
+        },
+        getSongList:state => {
+            return state.audioInfo.SongList
         }
         //播放器end
     },
@@ -41,6 +44,9 @@ const store = new Vuex.Store({
                 return
             }
             state.audioInfo.SongInfo = data
+        },
+        setSongList(state,data){
+            state.audioInfo.SongList = data
         }
         //播放器end
     }

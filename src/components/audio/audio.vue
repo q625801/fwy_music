@@ -251,7 +251,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(['getSongInfo'])
+    ...mapGetters(['getSongInfo','getSongList'])
   },
   watch:{
     getSongInfo(newval,oldval){
@@ -263,7 +263,7 @@ export default {
       this.SongName = newval.SongName
       this.SongPic = newval.SongPic
       this.SongArtists = newval.SongArtists
-    }
+    },
   },
   destory(){
 

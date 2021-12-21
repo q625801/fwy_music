@@ -59,7 +59,18 @@ export default {
         SongPic:SongInfo.picUrl,
         SongArtists:this.SongArtists(SongInfo.song.artists)
       }
+      let arr = [];
+      this.newsongdata.forEach((item,index) => {
+        let obj = {}
+        obj.SongId = item.id
+        obj.SongName = item.name
+        obj.SongPic = item.picUrl
+        obj.SongArtists = this.SongArtists(item.song.artists)
+        obj.SongTime = this.playtime(item.song.bMusic.playTime)
+        arr.push(obj)
+      })
       this.$store.commit('setSongInfo',data)
+      this.$store.commit('setSongList',arr)
     }
   },
   computed:{
