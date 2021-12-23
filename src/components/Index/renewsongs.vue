@@ -8,7 +8,7 @@
               <div class="newsong-player"></div>
             </div>
             <div class="fl newsongs-img">
-              <img v-lazy="item.picUrl" :key="item.picUrl"/>
+              <img v-lazy="item.picUrl + '?param=100y100'" :key="item.picUrl"/>
             </div>
             <div class="fl newsongs-info">
               <span>{{item.name}}</span>

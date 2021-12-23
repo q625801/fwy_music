@@ -1,17 +1,17 @@
 <template>
-  <div class="wrap audio-wrap sdwa" v-if="$store.state.audioInfo.audioFlag">
+  <div class="wrap audio-wrap sdwa" v-show="$store.state.audioInfo.audioFlag">
     <div class="player-bar">
       <div class="avatar">
-        <img alt="nicemusic" :src="SongPic" :title="SongName">
+        <img alt="nicemusic" :src="SongPic + '?param=100y100'" :title="SongName">
       </div>
       <div class="info">
         <h2 class="ellipsis">{{SongName}}</h2>
         <p class="ellipsis">{{SongArtists}}</p>
       </div>
       <div class="player-btn clear">
-        <span class="player-prev fl"></span>
+        <span class="player-prev fl" @click="prevSong"></span>
         <span @click="audioplay" class="fl" :class="audiostate ? 'player-play' : 'player-stop'"></span>
-        <span class="player-next fl"></span>
+        <span class="player-next fl" @click="nextSong"></span>
       </div>
       <div id="progress-wrap" class="progress-wrap">
         <p class="current-time">{{playTime}}</p>
@@ -63,6 +63,7 @@ export default {
       is_yuanmousedown:false,
       volumeTitle:'静音',
 
+      SongId:'',
       SongName:'',
       SongPic:'',
       SongArtists:'',
@@ -72,7 +73,8 @@ export default {
   components:{
     playlist
   },
-  created(){
+  mounted(){
+    this.audioTimeUpdate();//添加监听事件
     // this.getmusicurl(33911781);
   },
   methods:{
@@ -89,27 +91,30 @@ export default {
     getmusicurl(id){
       this.postJson(mp3url,{id:id},(res) => {
           this.$refs.audio.src = res.data.data[0].url;
-          this.audioTimeUpdate();//添加监听事件
       },(err) => {
 
       },false)
     },
     audioTimeUpdate () {
-      let audio  = this.$refs.audio;
-      audio.addEventListener('timeupdate', this.setTime);//监听播放时间
       let that = this;
+      let audio = this.$refs.audio;
+      audio.autoplay = true;
+      audio.addEventListener('timeupdate', this.setTime);//监听播放时间
       audio.addEventListener("playing", function(){//监听播放
         that.audiostate = false;
       });
       audio.addEventListener("pause", function(){//监听暂停
         that.audiostate = true;
       });
+      audio.addEventListener("ended", function(){//监听音频播放完毕
+        that.$store.commit('setAudioPlayBtn',false)
+        that.nextSong()
+      });
       audio.addEventListener("canplay", function(){//监听audio是否加载完毕，如果加载完毕，则读取audio播放时间
         that.audioduration = that.$refs.audio.duration;
         if(that.checkplayfirst){
           that.checkplayfirst = false;
           that.$store.commit('setAudioPlayBtn',true)
-          audio.play();
         }
       });
     },
@@ -151,6 +156,7 @@ export default {
     },
     audioplay(){
       let audio = this.$refs.audio;
+      console.log(audio.paused)
       if (audio.paused) {
         this.$store.commit('setAudioPlayBtn',true)
       } else {
@@ -245,10 +251,32 @@ export default {
     },
     changeVolume(){
       this.$refs.audio.volume = this.VolumeSize/100
+    },
+    nextSong(){
+      let SongList = this.$store.getters.getSongList
+      let SongOnIndex = SongList.findIndex((v,i,arr) => {
+        return this.SongId == v.SongId
+      })
+      SongOnIndex++
+      if(SongOnIndex == SongList.length){
+        SongOnIndex = 0
+      }
+      this.$store.commit('setSongInfo',SongList[SongOnIndex])
+    },
+    prevSong(){
+      let SongList = this.$store.getters.getSongList
+      let SongOnIndex = SongList.findIndex((v,i,arr) => {
+        return this.SongId == v.SongId
+      })
+      SongOnIndex--
+      if(SongOnIndex == -1){
+        SongOnIndex = SongList.length - 1
+      }
+      this.$store.commit('setSongInfo',SongList[SongOnIndex])
     }
   },
   computed:{
-    ...mapGetters(['getSongInfo','getSongList','getAudioPlayBtn'])
+    ...mapGetters(['getSongInfo','getAudioPlayBtn'])
   },
   watch:{
     getSongInfo(newval,oldval){
@@ -257,6 +285,7 @@ export default {
         this.$store.commit('setAudioFlag',true)
       }
       this.getmusicurl(newval.SongId)
+      this.SongId = newval.SongId
       this.SongName = newval.SongName
       this.SongPic = newval.SongPic
       this.SongArtists = newval.SongArtists

@@ -5,7 +5,7 @@
       <div class="songsheet-list fl" v-for="(item,index) in songsheetdata" :key="index" v-if="index < 28" @click="gosheetdetail(item.id)">
         <div class="list-img">
           <div class="list-playCount">{{(item.playCount/10000).toString().split(".")[0] + "万"}}</div>
-          <img v-lazy="item.picUrl" :key="item.picUrl">
+          <img v-lazy="item.picUrl + '?param=200y200'" :key="item.picUrl">
           <div class="list-player amn4"></div>
         </div>
         <div class="list-title">
