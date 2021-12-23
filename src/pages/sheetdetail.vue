@@ -6,7 +6,7 @@
           <div class="left-top clear">
             <div class="left-img fl">
               <img v-lazy="detailinfo.coverImgUrl" :key="detailinfo.coverImgUrl" :alt="detailinfo.name" :title="detailinfo.name"/>
-              <!-- <img src="../assets/img/loading.gif"/> -->
+              <!-- <img src="../assets/img/loading1.gif"/> -->
             </div>
             <div class="left-content fl">
               <div class="title">
