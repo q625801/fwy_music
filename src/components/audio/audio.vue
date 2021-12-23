@@ -46,7 +46,7 @@
 
 <script>
 import {mp3url} from "@/api/api"
-import {IsPC} from "@/api/common"
+import {IsPC,Shuffle} from "@/api/common"
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import playlist from "./playlist"
 export default {
@@ -62,7 +62,8 @@ export default {
       checkplayfirst:true,
       is_yuanmousedown:false,
       volumeTitle:'静音',
-      audioPlayMode:'',
+      audioPlayMode:'loop',
+      shuffleSongList:[],
 
       SongId:'',
       SongName:'',
@@ -108,8 +109,12 @@ export default {
         that.audiostate = true;
       });
       audio.addEventListener("ended", function(){//监听音频播放完毕
-        that.$store.commit('setAudioPlayBtn',false)
-        that.nextSong()
+        if(that.audioPlayMode == 'loopone'){
+          audio.play()
+        }else{
+          that.$store.commit('setAudioPlayBtn',false)
+          that.nextSong()
+        }
       });
       audio.addEventListener("canplay", function(){//监听audio是否加载完毕，如果加载完毕，则读取audio播放时间
         that.audioduration = that.$refs.audio.duration;
@@ -253,41 +258,55 @@ export default {
       this.$refs.audio.volume = this.VolumeSize/100
     },
     nextSong(){
-      let SongList = this.$store.getters.getSongList
-      let SongOnIndex = SongList.findIndex((v,i,arr) => {
+      if(this.audioPlayMode == 'loop' || this.audioPlayMode == 'loopone'){
+        let SongList = this.$store.getters.getSongList
+        this.goNextSong(SongList)
+      }else if(this.audioPlayMode == 'random'){
+        this.goNextSong(this.shuffleSongList)
+      }
+    },
+    prevSong(){
+      if(this.audioPlayMode == 'loop' || this.audioPlayMode == 'loopone'){
+        let SongList = this.$store.getters.getSongList
+        this.goPrevSong(SongList)
+      }else{
+        this.goPrevSong(this.shuffleSongList)
+      }
+    },
+    goNextSong(arr){
+      let SongOnIndex = arr.findIndex((v,i) => {
         return this.SongId == v.SongId
       })
       SongOnIndex++
-      if(SongOnIndex == SongList.length){
+      if(SongOnIndex == arr.length){
         SongOnIndex = 0
       }
-      this.$store.commit('setSongInfo',SongList[SongOnIndex])
+      this.$store.commit('setSongInfo',arr[SongOnIndex])
     },
-    prevSong(){
-      let SongList = this.$store.getters.getSongList
-      let SongOnIndex = SongList.findIndex((v,i,arr) => {
+    goPrevSong(arr){
+      let SongOnIndex = arr.findIndex((v,i) => {
         return this.SongId == v.SongId
       })
       SongOnIndex--
       if(SongOnIndex == -1){
-        SongOnIndex = SongList.length - 1
+        SongOnIndex = arr.length - 1
       }
-      this.$store.commit('setSongInfo',SongList[SongOnIndex])
+      this.$store.commit('setSongInfo',arr[SongOnIndex])
     },
     changePlayMode(){
-      if(this.audioPlayMode == ''){
+      if(this.audioPlayMode == 'loop'){
         this.audioPlayMode = 'loopone'
       }else if(this.audioPlayMode == 'loopone'){
         this.audioPlayMode = 'random'
       }else{
-        this.audioPlayMode = ''
+        this.audioPlayMode = 'loop'
       }
     },
   },
   computed:{
-    ...mapGetters(['getSongInfo','getAudioPlayBtn']),
+    ...mapGetters(['getSongInfo','getAudioPlayBtn','getSongList']),
     comPlayMode(){
-      if(this.audioPlayMode == ''){
+      if(this.audioPlayMode == 'loop'){
         return ''
       }else if(this.audioPlayMode == 'loopone'){
         return 'loopone'
@@ -316,6 +335,14 @@ export default {
         // 播放中
         this.$refs.audio.pause();
       }
+    },
+    getSongList:{
+      handler(newVal, oldVal) {
+        let SongList = JSON.stringify(this.$store.getters.getSongList)
+        this.shuffleSongList = Shuffle(JSON.parse(SongList))//随机歌单列表
+      },
+      immediate: true,
+      deep: true
     }
   },
   destory(){
@@ -341,6 +368,9 @@ export default {
   display:flex;
   justify-content: space-between;
   align-items:center;
+  width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 .player-bar .avatar{
   width: 60px;

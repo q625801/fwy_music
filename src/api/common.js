@@ -83,3 +83,12 @@ export const numchangecn = (value) => {
   }
   return newValue.join('');
 }
+
+export const Shuffle = arr => {
+  let res = [],random
+  while (arr.length > 0) {
+    random = parseInt(Math.random() * arr.length)
+    res.push(arr.splice(random,1)[0])
+  }
+  return res
+}

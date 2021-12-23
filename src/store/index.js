@@ -19,7 +19,6 @@ const store = new Vuex.Store({
             },
             SongListFlag:false,
             SongList:[],//播放列表数据
-            SongListHistory:[],//歌曲播放数据
         },
         //播放器end
     },
@@ -34,9 +33,6 @@ const store = new Vuex.Store({
         getAudioPlayBtn:state => {
             return state.audioInfo.audioPlayBtn
         },
-        getSongListHistory:state => {
-            return state.audioInfo.SongListHistory
-        }
         //播放器end
     },
     mutations:{ //this.$store.commit('setSongId','')
@@ -56,9 +52,6 @@ const store = new Vuex.Store({
         setSongList(state,data){
             state.audioInfo.SongList = data
         },
-        setSongListHistory(state,data){
-            state.audioInfo.SongListHistory.push(data)
-        }
         //播放器end
     }
 })
