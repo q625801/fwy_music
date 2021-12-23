@@ -34,7 +34,7 @@
         <el-slider class="volume-slider" :show-tooltip="false" @input="changeVolume" v-model="VolumeSize"></el-slider>
       </div>
       <div class="bfqbox-wrap clear">
-        <span class="bflx suiji fl"></span>
+        <span class="bflx fl" :class="[comPlayMode]" @click="changePlayMode"></span>
         <span class="fl text">词</span>
         <span class="fl list" @click="playlistflag = !playlistflag"></span>
       </div>
@@ -62,6 +62,7 @@ export default {
       checkplayfirst:true,
       is_yuanmousedown:false,
       volumeTitle:'静音',
+      audioPlayMode:'',
 
       SongId:'',
       SongName:'',
@@ -156,7 +157,6 @@ export default {
     },
     audioplay(){
       let audio = this.$refs.audio;
-      console.log(audio.paused)
       if (audio.paused) {
         this.$store.commit('setAudioPlayBtn',true)
       } else {
@@ -273,10 +273,28 @@ export default {
         SongOnIndex = SongList.length - 1
       }
       this.$store.commit('setSongInfo',SongList[SongOnIndex])
-    }
+    },
+    changePlayMode(){
+      if(this.audioPlayMode == ''){
+        this.audioPlayMode = 'loopone'
+      }else if(this.audioPlayMode == 'loopone'){
+        this.audioPlayMode = 'random'
+      }else{
+        this.audioPlayMode = ''
+      }
+    },
   },
   computed:{
-    ...mapGetters(['getSongInfo','getAudioPlayBtn'])
+    ...mapGetters(['getSongInfo','getAudioPlayBtn']),
+    comPlayMode(){
+      if(this.audioPlayMode == ''){
+        return ''
+      }else if(this.audioPlayMode == 'loopone'){
+        return 'loopone'
+      }else{
+        return 'random'
+      }
+    }
   },
   watch:{
     getSongInfo(newval,oldval){
@@ -481,14 +499,14 @@ export default {
   display:block;
   width:20px;
   height:20px;
-  background:url(../../assets/img/xunhuan.png) center no-repeat;
-  background-size:20px;
-}
-.bfqbox-wrap .bflx.loop{
   background:url(../../assets/img/loop.png) center no-repeat;
   background-size:20px;
 }
-.bfqbox-wrap .bflx.suiji{
+.bfqbox-wrap .bflx.loopone{
+  background:url(../../assets/img/loopone.png) center no-repeat;
+  background-size:20px;
+}
+.bfqbox-wrap .bflx.random{
   background:url(../../assets/img/suiji.png) center no-repeat;
   background-size:20px;
 }
