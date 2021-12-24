@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {mp3url} from "@/api/api"
+import {mp3url,songlyric} from "@/api/api"
 import {IsPC,Shuffle} from "@/api/common"
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import playlist from "./playlist"
@@ -93,6 +93,13 @@ export default {
     getmusicurl(id){
       this.postJson(mp3url,{id:id},(res) => {
           this.$refs.audio.src = res.data.data[0].url;
+      },(err) => {
+
+      },false)
+    },
+    getlyric(id){
+      this.postJson(songlyric,{id:id},(res) => {
+          console.log(res)
       },(err) => {
 
       },false)
@@ -322,6 +329,7 @@ export default {
         this.$store.commit('setAudioFlag',true)
       }
       this.getmusicurl(newval.SongId)
+      this.getlyric(newval.SongId)
       this.SongId = newval.SongId
       this.SongName = newval.SongName
       this.SongPic = newval.SongPic

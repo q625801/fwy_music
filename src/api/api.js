@@ -30,6 +30,8 @@ export const related = api + '/related/playlist'
 export const mp3url = api + '/song/url'
 // ===================获取歌曲详情
 export const songsdetail = api + '/song/detail'
+// ===================获取歌曲歌词
+export const songlyric = api + '/lyric'
 
 // ===================歌单评论
 export const songdetaiilcomment = api + '/comment/playlist'
