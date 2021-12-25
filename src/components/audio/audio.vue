@@ -35,12 +35,13 @@
       </div>
       <div class="bfqbox-wrap clear">
         <span class="bflx fl" :class="[comPlayMode]" @click="changePlayMode"></span>
-        <span class="fl text">词</span>
-        <span class="fl list" @click="playlistflag = !playlistflag"></span>
+        <span class="fl text" @click="$refs.lyric.lyricFlag = !$refs.lyric.lyricFlag;$refs.playlist.playlistFlag = false">词</span>
+        <span class="fl list" @click="$refs.playlist.playlistFlag = !$refs.playlist.playlistFlag;$refs.lyric.lyricFlag = false"></span>
       </div>
     </div>
     <audio ref="audio">您的浏览器不支持 audio 标签。</audio>
-    <playlist v-show="playlistflag"></playlist>
+    <playlist ref="playlist"></playlist>
+    <lyric ref="lyric"></lyric>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ import {mp3url,songlyric} from "@/api/api"
 import {IsPC,Shuffle} from "@/api/common"
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import playlist from "./playlist"
+import lyric from "./lyric"
 export default {
   name: 'audioN',
   data(){
@@ -69,11 +71,11 @@ export default {
       SongName:'',
       SongPic:'',
       SongArtists:'',
-      playlistflag:false,
     }
   },
   components:{
-    playlist
+    playlist,
+    lyric
   },
   mounted(){
     this.audioTimeUpdate();//添加监听事件
@@ -99,7 +101,7 @@ export default {
     },
     getlyric(id){
       this.postJson(songlyric,{id:id},(res) => {
-          console.log(res)
+          this.$refs.lyric.init(res.data.lrc.lyric)
       },(err) => {
 
       },false)
@@ -108,7 +110,10 @@ export default {
       let that = this;
       let audio = this.$refs.audio;
       audio.autoplay = true;
-      audio.addEventListener('timeupdate', this.setTime);//监听播放时间
+      audio.addEventListener('timeupdate',function(){
+        that.setTime()
+        that.setLyric()
+      });//监听播放时间
       audio.addEventListener("playing", function(){//监听播放
         that.audiostate = false;
       });
@@ -309,6 +314,11 @@ export default {
         this.audioPlayMode = 'loop'
       }
     },
+    setLyric(){
+      if (this.$refs.lyric.lineNo == this.$refs.lyric.lyricContent.length) return;
+      this.$refs.lyric.lineNo = this.$refs.lyric.getLineNo(this.$refs.audio.currentTime);
+      this.$refs.lyric.highLight();
+    }
   },
   computed:{
     ...mapGetters(['getSongInfo','getAudioPlayBtn','getSongList']),
@@ -539,6 +549,7 @@ export default {
   height:20px;
   background:url(../../assets/img/loop.png) center no-repeat;
   background-size:20px;
+  cursor:pointer;
 }
 .bfqbox-wrap .bflx.loopone{
   background:url(../../assets/img/loopone.png) center no-repeat;

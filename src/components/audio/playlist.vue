@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap-playlist sdwa">
+    <div class="wrap-playlist amn6 sdwa" :class="{'show':playlistFlag}">
         <div class="playlist-bt">
             播放列表({{SomgList.length}})
         </div>
@@ -25,7 +25,8 @@ export default {
     name:'playlist',
     data(){
         return {
-            SomgList:''
+            SomgList:'',
+            playlistFlag:false,
         }
     },
     mounted(){
@@ -70,6 +71,12 @@ export default {
     right: 0;
     background: #ffffff;
     z-index: 99;
+    transform: translateX(500px);
+    opacity:0;
+}
+.wrap-playlist.show{
+    transform: translateX(0px);
+    opacity:1;
 }
 .playlist-bt{
     font-size: 16px;
@@ -84,8 +91,7 @@ export default {
     padding-bottom: 18px;
 }
 .playlist-listbdc{
-    height: 347px;
-    padding-bottom: 20px;
+    height: 327px;
     box-sizing: border-box;
     overflow-y: scroll;
 }

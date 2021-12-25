@@ -305,6 +305,8 @@ table {
     font-size: 14px;
     color: #C62F2F;
     padding:20px 0;
+}
+.songmore span{
     cursor: pointer;
 }
 .songlist-table tbody tr .td-wap{
