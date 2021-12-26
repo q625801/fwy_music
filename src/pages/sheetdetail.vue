@@ -18,13 +18,14 @@
                 </div>
                 <div class="createinfo-name wz fl" @click="$router.push('/userhome?uid='+ creator.userId)">{{creator.nickname}}</div>
                 <div class="wz fl createinfo-data">{{detailinfo.createTime}}创建</div>
+                <div class="wz fl createinfo-data"><span class="cla">{{detailinfo.playCount}}</span>次播放</div>
               </div>
               <div class="sd-tag clear">
                 <div class="fl ttl" v-if="detailinfo.tags">标签：</div>
                 <span class="fl" v-for="(item,index) in detailinfo.tags" :key="index">{{item}}</span>
               </div>
               <div class="sd-description">
-                {{detailinfo.description}}
+                <span class="ttl">介绍：</span>{{detailinfo.description}}
               </div>
             </div>
           </div>
@@ -188,6 +189,13 @@ export default {
   display:-webkit-box;
   -webkit-box-orient:vertical;
   -webkit-line-clamp:3;
+}
+.sd-description .ttl{
+  font-size: 14px;
+  line-height: 24px;
+}
+.createinfo-data .cla{
+  color:#fa2800;
 }
 @media screen and (max-width:1280px){
   .container{

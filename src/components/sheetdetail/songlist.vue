@@ -263,6 +263,9 @@ table {
     color: #4a4a4a;
     font-weight: 500;
     font-size: 14px;
+    width: 100%;
+    text-align: center;
+    display:block;
 }
 .name-container{
     display: flex;
@@ -289,6 +292,9 @@ table {
 }
 .name-container p{
     cursor: pointer;
+}
+.name-container p:hover{
+    color:#C62F2F;
 }
 .ellipsis{
     overflow: hidden;

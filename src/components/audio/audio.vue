@@ -121,6 +121,7 @@ export default {
         that.audiostate = true;
       });
       audio.addEventListener("ended", function(){//监听音频播放完毕
+        that.$refs.lyric.lineNo = 0
         if(that.audioPlayMode == 'loopone'){
           audio.play()
         }else{
