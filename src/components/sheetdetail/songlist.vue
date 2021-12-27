@@ -4,7 +4,7 @@
             <div class="playall-por">
                 <span>+ 收藏({{subscribnum}})</span>
             </div>
-            <div class="playall-por plauall-btn">
+            <div class="playall-por plauall-btn" @click="goAudioPlay(songlistdata[0])">
                 <span>播放全部</span>
             </div>
         </div>

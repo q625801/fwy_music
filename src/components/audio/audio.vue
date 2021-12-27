@@ -101,7 +101,7 @@ export default {
     },
     getlyric(id){
       this.postJson(songlyric,{id:id},(res) => {
-          this.$refs.lyric.init(res.data.lrc.lyric)
+        this.$refs.lyric.init(res.data.lrc.lyric,res.data.lrc.version) //网易云歌词version 参数 1:有时间 2.没时间
       },(err) => {
 
       },false)

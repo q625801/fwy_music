@@ -1,9 +1,12 @@
 <template>
     <div class="wrap-lyriclist amn6 sdwa" :class="{'show':lyricFlag}">
         <div class="lyric-content">
-            <ul ref="lyricul" class="amn4">
+            <ul ref="lyricul" class="amn4" v-if="this.lyricVersion != 2">
                 <li v-for="(item,index) in lyricContent" :key="index" :class="{'active':lineNo == index}">{{item.content}}</li>
             </ul>
+            <p v-else>
+                {{lyricContent}}
+            </p>
         </div>
     </div>
 </template>
@@ -15,6 +18,7 @@ export default {
         return {
             lyricFlag:false,
             lyricContent: '',
+            lyricVersion: '',
             lineNo: 0, // 当前行歌词
             preLine: 6, // 当播放6行后开始滚动歌词
             lineHeight: -30, // 每次滚动的距离
@@ -24,8 +28,14 @@ export default {
         
     },
     methods:{
-        init(data){
-            this.lyricContent = this.parseLyric(data);
+        init(data,version){
+            this.lyricVersion = version
+            if(this.lyricVersion == 2){
+                this.lyricContent = data 
+            }else{
+                this.lyricContent = this.parseLyric(data);
+            }
+            
             // this.parseLyric(this.lyricContent)
         },
         parseLyric(text) {
@@ -54,6 +64,9 @@ export default {
             return result
         },
         highLight() {
+            if(this.lyricVersion == 2){
+                return
+            }
             let allHegiht = 0
             for(let i = 0;i<this.lineNo;i++){
                 allHegiht += this.$refs.lyricul.children[i].offsetHeight
@@ -61,21 +74,26 @@ export default {
             this.$refs.lyricul.style.top = (-allHegiht + 180) + 'px';
         },
         getLineNo(currentTime) {
-            if(this.lineNo == -1){
+            if(this.lyricVersion == 2){
+                return
+            }
+            if(this.lineNo == -1 || this.lineNo == undefined){
                 this.lineNo = 0
             }
-            if (currentTime >= parseFloat(this.lyricContent[this.lineNo].time)) {
-                // 快进
-                for (let i = this.lyricContent.length - 1; i >= this.lineNo; i--) {
-                    if (currentTime >= parseFloat(this.lyricContent[i].time)) {
-                        return i;
+            if(this.lyricContent && this.lyricContent.length > 0){
+                if (currentTime >= parseFloat(this.lyricContent[this.lineNo].time)) {
+                    // 快进
+                    for (let i = this.lyricContent.length - 1; i >= this.lineNo; i--) {
+                        if (currentTime >= parseFloat(this.lyricContent[i].time)) {
+                            return i;
+                        }
                     }
-                }
-            } else {
-                // 后退
-                for (let i = 0; i <= this.lineNo; i++) {
-                    if (currentTime <= parseFloat(this.lyricContent[i].time)) {
-                        return i - 1;
+                } else {
+                    // 后退
+                    for (let i = 0; i <= this.lineNo; i++) {
+                        if (currentTime <= parseFloat(this.lyricContent[i].time)) {
+                            return i - 1;
+                        }
                     }
                 }
             }
