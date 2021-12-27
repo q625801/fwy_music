@@ -22,6 +22,8 @@ export const newsong = api + '/personalized/newsong'
 export const sddetail = api + '/playlist/detail'
 // ===================歌单收藏者
 export const subscribers = api + '/playlist/subscribers'
+// ===================获取歌单全部歌曲
+export const sdsongAll = api + '/playlist/track/all'
 
 // ===================相关歌单推荐
 export const related = api + '/related/playlist'

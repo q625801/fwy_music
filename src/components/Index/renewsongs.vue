@@ -2,7 +2,7 @@
   <div class="wrap wrap-index-qt pd20">
     <h2 class="title">推荐新歌曲</h2>
     <div class="newsongs-all clear">
-        <div class="newsongs-list amn3 sdw clear" v-for="(item,index) in newsongdata" :key="index" :class="[index%2 == 0 ? 'fl' : 'fr']" @click="audioPlay(item)">
+        <div class="newsongs-list amn3 sdw clear" v-for="(item,index) in newsongdata" :key="index" :class="[index%2 == 0 ? 'fl' : 'fr']" @click="audioPlay(item,newsongdata)">
             <div class="fl newsongs-index" :class="{'on':item.id == $store.state.audioInfo.SongInfo.SongId,'btnon':$store.state.audioInfo.audioPlayBtn && item.id == $store.state.audioInfo.SongInfo.SongId}">
               <span>{{index+1 >= 10 ? index+1:"0" + (index+1)}}</span>
               <div class="newsong-player"></div>
@@ -12,7 +12,7 @@
             </div>
             <div class="fl newsongs-info">
               <span>{{item.name}}</span>
-              <span>{{SongArtists(item.song.artists)}}</span>
+              <span>{{SongArtistsComputed(item.song.artists)}}</span>
             </div>
             <div class="fr newsongs-duration" :class="{'on':item.id == $store.state.audioInfo.SongInfo.SongId}">
               <span class="time">{{playtime(item.song.bMusic.playTime)}}</span>
@@ -52,40 +52,9 @@ export default {
 
       })
     },
-    audioPlay(SongInfo){
-      let data = {
-        SongId:SongInfo.id,
-        SongName:SongInfo.name,
-        SongPic:SongInfo.picUrl,
-        SongArtists:this.SongArtists(SongInfo.song.artists)
-      }
-      let arr = [];
-      this.newsongdata.forEach((item,index) => {
-        let obj = {}
-        obj.SongId = item.id
-        obj.SongName = item.name
-        obj.SongPic = item.picUrl
-        obj.SongArtists = this.SongArtists(item.song.artists)
-        obj.SongTime = this.playtime(item.song.bMusic.playTime)
-        arr.push(obj)
-      })
-      this.$store.commit('setSongInfo',data)
-      this.$store.commit('setSongList',arr)
-    }
   },
   computed:{
-    SongArtists(){
-      return (data) => {
-        if(data.length == 1){
-          return data[0].name
-        }else{
-          let name = data.map(obj => {
-            return obj.name
-          }).join(' / ')
-          return name
-        }
-      }
-    }
+    
   }
 }
 </script>

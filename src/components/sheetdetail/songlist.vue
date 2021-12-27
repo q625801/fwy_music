@@ -20,10 +20,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,index) in songlistdata" :key="index">
+                    <tr v-for="(item,index) in songlistdata" :key="index" @click="goAudioPlay(item)">
                         <td class="td-index">
-                            <div class="index-container flex-center">
+                            <div class="index-container flex-center" v-if="item.id != $store.state.audioInfo.SongInfo.SongId">
                                 <span class="num">{{index &lt; 9 ? '0' + (index+1) : (index+1)}}</span>
+                                <div class="ply"></div>
+                            </div>
+                            <div class="effect" v-else :class="{'paused':!$store.state.audioInfo.audioPlayBtn && item.id == $store.state.audioInfo.SongInfo.SongId}">
+                                <span class="line1"></span>
+                                <span class="line2"></span>
+                                <span class="line3"></span>
+                                <span class="line4"></span>
                             </div>
                         </td>
                         <td class="td-name">
@@ -74,7 +81,7 @@
 </template>
 
 <script>
-import {songsdetail} from "@/api/api"
+import {songsdetail,sdsongAll} from "@/api/api"
 import {numchangecn} from "@/api/common"
 export default {
   name: 'songlist',
@@ -90,6 +97,7 @@ export default {
       songmoreloading:false,
       showsongmore:false,
       subscribnum:'',
+      songlistAll:[],
     }
   },
   props:[
@@ -100,7 +108,7 @@ export default {
     
   },
   mounted(){
-
+      this.getAllSong(this.$route.query.id)
   },
   computed:{
     
@@ -111,15 +119,15 @@ export default {
         this.showsongmore = true;
         this.songmoreloading = true;
         this.postJson(songsdetail,{ids:data.toString()},(res) => {
-        if(res.data.code == 200){
-            this.songlistdata = this.songlistdata.concat(res.data.songs);
-            if(this.songlistdata.length < this.songlistarr.length){
-                this.showsongmore = true;
-                this.songmoreloading = false;
-            }else{
-                this.showsongmore = false;
+            if(res.data.code == 200){
+                this.songlistdata = this.songlistdata.concat(res.data.songs);
+                if(this.songlistdata.length < this.songlistarr.length){
+                    this.showsongmore = true;
+                    this.songmoreloading = false;
+                }else{
+                    this.showsongmore = false;
+                }
             }
-        }
         },(err)=>{
 
         },false)
@@ -156,7 +164,41 @@ export default {
         }else{
             this.subscribnum = numValue
         }
-        
+    },
+    getAllSong(id){
+        this.postJson(sdsongAll,{id:id},(res) => {
+            if(res.data.code == 200){
+                this.songlistAll = res.data.songs
+            }
+        },(err)=>{
+
+        },false)
+    },
+    goAudioPlay(item){
+        let SongInfo = {
+            id: item.id,
+            name: item.name,
+            picUrl: item.al.picUrl,
+            song:{
+                artists: item.ar
+            }
+        }
+        let arr = []
+        this.songlistAll.forEach(item => {
+            let obj = {
+                id: item.id,
+                name: item.name,
+                picUrl: item.al.picUrl,
+                song:{
+                    artists: item.ar,
+                    bMusic:{
+                        playTime: item.dt,
+                    }
+                }
+            }
+            arr.push(obj)
+        })
+        this.audioPlay(SongInfo,arr)
     },
     init(){
         this.songlistarr = []
@@ -180,6 +222,9 @@ export default {
     },
     stdetaildata(data){
         this.subscrib(data.subscribedCount)
+    },
+    $route (to, from){
+      this.getAllSong(this.$route.query.id)
     }
   }
 }
@@ -247,12 +292,23 @@ table {
     height: 50px;
     line-height: 50px;
     transition: background-color .2s linear;
+    cursor: pointer;
+}
+.songlist-table tbody tr:hover .td-name .name-container p{
+    color:#C62F2F;
+}
+.songlist-table tbody tr:hover .td-index .index-container .num{
+    display: none;
+}
+.songlist-table tbody tr:hover .td-index .index-container .ply{
+    display: block;
 }
 .songlist-table tbody tr td{
     padding: 0 9px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
 }
 .index-container{
     display: flex;
@@ -266,6 +322,13 @@ table {
     width: 100%;
     text-align: center;
     display:block;
+}
+.index-container .ply{
+    background: url(../../assets/img/player-btn3.png) center no-repeat;
+    background-size: 30px;
+    width: 100%;
+    height: 50px;
+    display: none;
 }
 .name-container{
     display: flex;
@@ -292,9 +355,6 @@ table {
 }
 .name-container p{
     cursor: pointer;
-}
-.name-container p:hover{
-    color:#C62F2F;
 }
 .ellipsis{
     overflow: hidden;
@@ -338,6 +398,56 @@ table {
     background: url("../../assets/img/player-btn2.png") left center no-repeat;
     background-size: 25px;
     padding-left: 28px;
+}
+.effect{
+    display: inline-block;
+    height: 30px;
+    line-height: 40px;
+    text-align: center;
+    position: absolute;
+    vertical-align: bottom;
+    width: 50px;
+    top: 11px;
+    left: 13px;
+}
+.effect span{
+    display: inline-block;
+    width: 3px;
+    margin-bottom: 0;
+    background-color: #C62F2F;
+    margin-right: -12px;
+}
+.effect span.line1 {
+    animation: line 0.6s infinite ease-in-out alternate;
+}
+.effect span.line2 {
+    animation: line 0.6s 0.2s infinite ease-in-out alternate;
+}
+.effect span.line3 {
+    animation: line 0.6s 0.4s infinite ease-in-out alternate;
+}
+.effect span.line4 {
+    animation: line 0.6s 0.6s infinite ease-in-out alternate;
+}
+.effect.paused span{
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused;
+}
+@keyframs line {
+    from {
+      height: 0;
+    }
+    to {
+      height: 20px;
+    }
+}
+@-webkit-keyframes line {
+    from {
+      height: 0;
+    }
+    to {
+      height: 20px;
+    }
 }
 @media screen and (max-width:1280px){
     .songlist-wrap{

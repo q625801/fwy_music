@@ -62,6 +62,42 @@ let mixin = {
         },
         playtime(time) {
             return minutes(time) + ":" + seconds(time)
+        },
+        audioPlay(SongInfo,SongList){
+            let data = {
+                SongId:SongInfo.id,
+                SongName:SongInfo.name,
+                SongPic:SongInfo.picUrl,
+                SongArtists:this.SongArtistsComputed(SongInfo.song.artists)
+            }
+            let arr = [];
+            if(SongList && SongList.length > 0){
+                SongList.forEach((item,index) => {
+                    let obj = {}
+                    obj.SongId = item.id
+                    obj.SongName = item.name
+                    obj.SongPic = item.picUrl
+                    obj.SongArtists = this.SongArtistsComputed(item.song.artists)
+                    obj.SongTime = this.playtime(item.song.bMusic.playTime)
+                    arr.push(obj)
+                })
+                this.$store.commit('setSongList',arr)
+            }
+            this.$store.commit('setSongInfo',data)
+        }
+    },
+    computed:{
+        SongArtistsComputed(){
+            return (data) => {
+                if(data.length == 1){
+                    return data[0].name
+                }else{
+                    let name = data.map(obj => {
+                        return obj.name
+                    }).join(' / ')
+                    return name
+                }
+            }
         }
     }
 }
