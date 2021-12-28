@@ -1,12 +1,10 @@
 <template>
     <div class="wrap-lyriclist amn6 sdwa" :class="{'show':lyricFlag}">
         <div class="lyric-content">
-            <ul ref="lyricul" class="amn4" v-if="this.lyricVersion != 2">
+            <ul ref="lyricul" class="amn4" v-if="lyricVersion">
                 <li v-for="(item,index) in lyricContent" :key="index" :class="{'active':lineNo == index}">{{item.content}}</li>
             </ul>
-            <p v-else>
-                {{lyricContent}}
-            </p>
+            <p class="lyric-p" v-for="(item,index) in lyricContent" :key="index" v-else>{{item}}</p>
         </div>
     </div>
 </template>
@@ -18,7 +16,7 @@ export default {
         return {
             lyricFlag:false,
             lyricContent: '',
-            lyricVersion: '',
+            lyricVersion: true,
             lineNo: 0, // 当前行歌词
             preLine: 6, // 当播放6行后开始滚动歌词
             lineHeight: -30, // 每次滚动的距离
@@ -29,14 +27,8 @@ export default {
     },
     methods:{
         init(data,version){
-            this.lyricVersion = version
-            if(this.lyricVersion == 2){
-                this.lyricContent = data 
-            }else{
-                this.lyricContent = this.parseLyric(data);
-            }
-            
-            // this.parseLyric(this.lyricContent)
+            this.lineNo = 0
+            this.lyricContent = this.parseLyric(data);
         },
         parseLyric(text) {
             //按行分割歌词
@@ -61,10 +53,16 @@ export default {
                     }
                 }
             }
-            return result
+            if(result.length > 0){
+                this.lyricVersion = true
+                return result
+            }else{
+                this.lyricVersion = false
+                return lyricArr
+            }
         },
         highLight() {
-            if(this.lyricVersion == 2){
+            if(!this.lyricVersion){
                 return
             }
             let allHegiht = 0
@@ -74,13 +72,11 @@ export default {
             this.$refs.lyricul.style.top = (-allHegiht + 180) + 'px';
         },
         getLineNo(currentTime) {
-            if(this.lyricVersion == 2){
-                return
-            }
             if(this.lineNo == -1 || this.lineNo == undefined){
                 this.lineNo = 0
             }
-            if(this.lyricContent && this.lyricContent.length > 0){
+            console.log(this.lyricContent,this.lineNo)
+            if(this.lyricContent && this.lyricContent.length > 0 && this.lyricContent[this.lineNo].time){
                 if (currentTime >= parseFloat(this.lyricContent[this.lineNo].time)) {
                     // 快进
                     for (let i = this.lyricContent.length - 1; i >= this.lineNo; i--) {
@@ -152,5 +148,13 @@ export default {
     color: #C62F2F;
     font-weight: bold;
     font-size: 16px;
+}
+.lyric-p{
+    width: 100%;
+    min-height: 31px;
+    line-height: 31px;
+    text-align: center;
+    color:#4a4a4a;
+    font-size:14px;
 }
 </style>

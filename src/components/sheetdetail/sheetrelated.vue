@@ -50,7 +50,7 @@ export default {
       })
     },
     gosheetdetail(id){
-      this.$router.push({name:'sheetdetail',query: {id:id}})
+      this.$router.push({name:'sheetdetail',query: {id:id,sheetType:'songSheet'}})
     },
   },
   watch:{

@@ -40,3 +40,6 @@ export const songdetaiilcomment = api + '/comment/playlist'
 
 // ===================用户详情
 export const userdetail = api + '/user/detail'
+
+// ===================专辑
+export const getAlbum = api + '/album'

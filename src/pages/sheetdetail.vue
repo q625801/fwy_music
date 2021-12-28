@@ -9,27 +9,44 @@
               <!-- <img src="../assets/img/loading1.gif"/> -->
             </div>
             <div class="left-content fl">
-              <div class="title">
-                {{detailinfo.name}}
+              <div class="clear">
+                <div class="type fl">{{sheetType == 'songSheet' ? '歌单':'专辑'}}</div>
+                <div class="title fl">
+                  {{detailinfo.name}}
+                </div>
               </div>
               <div class="createinfo clear">
-                <div class="createinfo-avatar fl">
-                  <img :alt="creator.nickname" :title="creator.nickname" :src="creator.avatarUrl"/>
+                <div v-if="sheetType == 'songSheet'">
+                  <div class="createinfo-avatar fl">
+                    <img :alt="creator.nickname" :title="creator.nickname" :src="creator.avatarUrl"/>
+                  </div>
+                  <div class="createinfo-name wz fl" @click="$router.push('/userhome?uid='+ creator.userId)">{{creator.nickname}}</div>
+                  <div class="wz fl createinfo-data">{{detailinfo.createTime}}创建</div>
+                  <div class="wz fl createinfo-data"><span class="cla">{{detailinfo.playCount}}</span>次播放</div>
                 </div>
-                <div class="createinfo-name wz fl" @click="$router.push('/userhome?uid='+ creator.userId)">{{creator.nickname}}</div>
-                <div class="wz fl createinfo-data">{{detailinfo.createTime}}创建</div>
-                <div class="wz fl createinfo-data"><span class="cla">{{detailinfo.playCount}}</span>次播放</div>
+                <div v-else>
+                  <div class="album-createinfo clear">
+                      <div class="wz fl">歌手：</div>
+                      <div class="wz fl album-createinfo-span" v-for="(item,index) in creator" :key="index">
+                        <em v-if="index != 0">/</em>
+                        <span>
+                          {{item.name}}
+                        </span>
+                      </div>
+                  </div>
+                  <div class="wz fl createinfo-data">时间：{{detailinfo.createTime}}</div>
+                </div>
               </div>
-              <div class="sd-tag clear">
+              <div class="sd-tag clear" v-if="sheetType == 'songSheet'">
                 <div class="fl ttl" v-if="detailinfo.tags">标签：</div>
                 <span class="fl" v-for="(item,index) in detailinfo.tags" :key="index">{{item}}</span>
               </div>
-              <div class="sd-description">
+              <div class="sd-description" v-if="sheetType == 'songSheet'">
                 <span class="ttl">介绍：</span>{{detailinfo.description}}
               </div>
             </div>
           </div>
-          <songlist :songarr="detailinfo.trackIds" :stdetaildata="detailinfo"></songlist>
+          <songlist :songarr="detailinfo.trackIds" :stdetaildata="detailinfo" :getsheetType="sheetType"></songlist>
         </div>
         <div class="sd-right fr">
           <sheetlike :sheetcommentId="sheetId"></sheetlike>
@@ -42,7 +59,7 @@
 </template>
 
 <script>
-import {sddetail} from "@/api/api"
+import {sddetail,getAlbum} from "@/api/api"
 import {getLocalTime} from "@/api/common"
 import songlist from "@/components/sheetdetail/songlist"
 import sheetcomment from "@/components/sheetdetail/sheetcomment"
@@ -55,6 +72,7 @@ export default {
       detailinfo: '',
       creator:'',
       sheetId:'',
+      sheetType:'',
     }
   },
   components:{
@@ -66,9 +84,17 @@ export default {
   created(){
   },
   mounted(){
-    this.getsddetail(this.$route.query.id);
+    this.sheetType = this.$route.query.sheetType
+    this.choosDetail(this.$route.query.id)
   },
   methods:{
+    choosDetail(id){
+      if(this.sheetType == 'songSheet'){
+        this.getsddetail(id);
+      }else if(this.sheetType == 'albumSheet'){
+        this.getsAblbum(id)
+      }
+    },
     getsddetail(id){
       this.sheetId = id;
       this.postJson(sddetail,{id:id},(res) => {
@@ -81,13 +107,29 @@ export default {
 
       })
     },
+    getsAblbum(id){
+      this.sheetId = id;
+      this.postJson(getAlbum,{id:id},(res) => {
+        //因歌单和专辑接口JSON数据格式不同重写JSON格式
+        this.detailinfo = {
+          coverImgUrl:res.data.album.picUrl,
+          name:res.data.album.name,
+          trackIds:res.data.songs,
+          createTime:getLocalTime(res.data.album.publishTime).split(" ")[0]
+        };
+        this.creator = res.data.album.artists;
+      },(err)=>{
+
+      })
+    },
     changesddetail(id){
-      this.getsddetail(id)
+      this.choosDetail(id)
     }
   },
   watch:{
     $route (to, from){
-      this.getsddetail(this.$route.query.id)
+      this.sheetType = this.$route.query.sheetType
+      this.choosDetail(this.$route.query.id)
     }
   }
 }
@@ -135,7 +177,7 @@ export default {
     width: calc(100% - 200px);
 }
 .sd-left .left-top .left-content .title{
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
     line-height: 24px;
     padding-top: 10px;
@@ -196,6 +238,25 @@ export default {
 }
 .createinfo-data .cla{
   color:#fa2800;
+}
+.sd-left .left-top .left-content .type{
+    font-size: 15px;
+    font-weight: bold;
+    /* line-height: 0px; */
+    margin: 10px 10px 0 0 ;
+    padding: 3px 5px;
+    border: 1px solid #C62F2F;
+    color: #C62F2F;
+}
+.album-createinfo .album-createinfo-span{
+  margin:0;
+  cursor: pointer;
+}
+.album-createinfo .album-createinfo-span em{
+  padding-left: 5px;
+}
+.album-createinfo .album-createinfo-span span:hover{
+  color: #C62F2F;
 }
 @media screen and (max-width:1280px){
   .container{

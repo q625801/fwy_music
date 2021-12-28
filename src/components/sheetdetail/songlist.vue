@@ -52,7 +52,7 @@
                         </td>
                         <td class="td-album">
                             <div class="album-container">
-                                <p :title="item.al.name" class="ellipsis">{{item.al.name}}</p>
+                                <p :title="item.al.name" class="ellipsis album-p" @click.stop="gosheetdetail(item.al.id)">{{item.al.name}}</p>
                             </div>
                         </td>
                         <td class="td-duration">
@@ -98,17 +98,25 @@ export default {
       showsongmore:false,
       subscribnum:'',
       songlistAll:[],
+      sheetType:''
     }
   },
   props:[
     'songarr',
     'stdetaildata',
+    'getsheetType'
   ],
   components:{
     
   },
   mounted(){
-      this.getAllSong(this.$route.query.id)
+    switch (this.sheetType) {
+        case 'songSheet':
+            this.getAllSong(this.$route.query.id)
+            break;
+        default:
+            break;
+    }
   },
   computed:{
     
@@ -200,6 +208,9 @@ export default {
         })
         this.audioPlay(SongInfo,arr)
     },
+    gosheetdetail(id){
+      this.$router.push({name:'sheetdetail',query: {id:id,sheetType:'albumSheet'}}) //sheetType songSheet为歌单
+    },
     init(){
         this.songlistarr = []
         this.pagelength = ''
@@ -223,8 +234,17 @@ export default {
     stdetaildata(data){
         this.subscrib(data.subscribedCount)
     },
+    getsheetType(data){
+        this.sheetType = data
+    },
     $route (to, from){
-      this.getAllSong(this.$route.query.id)
+      switch (this.sheetType) {
+            case 'songSheet':
+                this.getAllSong(this.$route.query.id)
+                break;
+            default:
+                break;
+      }
     }
   }
 }
@@ -381,6 +401,9 @@ table {
 .songlist-playall{
     margin-bottom: 10px;
     overflow: hidden;
+}
+.album-p:hover{
+    color: #C62F2F;
 }
 .playall-por{
     color: #fff;

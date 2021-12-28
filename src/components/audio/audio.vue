@@ -94,7 +94,14 @@ export default {
     },
     getmusicurl(id){
       this.postJson(mp3url,{id:id},(res) => {
+        if(res.data.data[0].url != null){
           this.$refs.audio.src = res.data.data[0].url;
+        }else{
+          this.$message({message:'获取歌曲失败，自动跳转下一首！',customClass:'zZindex'});
+          this.nextSong()
+        }
+        
+        
       },(err) => {
 
       },false)
@@ -648,4 +655,9 @@ export default {
   width: auto;
   height: auto;
 }
+</style>
+<style>
+.zZindex {
+    z-index:10000 !important;
+  }
 </style>
