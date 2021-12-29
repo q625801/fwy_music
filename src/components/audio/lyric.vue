@@ -75,7 +75,7 @@ export default {
             if(this.lineNo == -1 || this.lineNo == undefined){
                 this.lineNo = 0
             }
-            console.log(this.lyricContent,this.lineNo)
+            // console.log(this.lyricContent,this.lineNo)
             if(this.lyricContent && this.lyricContent.length > 0 && this.lyricContent[this.lineNo].time){
                 if (currentTime >= parseFloat(this.lyricContent[this.lineNo].time)) {
                     // 快进

@@ -110,6 +110,7 @@ export default {
     
   },
   mounted(){
+    this.sheetType = this.$route.query.sheetType
     switch (this.sheetType) {
         case 'songSheet':
             this.getAllSong(this.$route.query.id)
@@ -123,7 +124,6 @@ export default {
   },
   methods:{
     getsongdata(data){
-        var that = this;
         this.showsongmore = true;
         this.songmoreloading = true;
         this.postJson(songsdetail,{ids:data.toString()},(res) => {
@@ -174,6 +174,7 @@ export default {
         }
     },
     getAllSong(id){
+        console.log('getAllSong')
         this.postJson(sdsongAll,{id:id},(res) => {
             if(res.data.code == 200){
                 this.songlistAll = res.data.songs
@@ -182,17 +183,23 @@ export default {
 
         },false)
     },
-    goAudioPlay(item){
+    goAudioPlay(data){
         let SongInfo = {
-            id: item.id,
-            name: item.name,
-            picUrl: item.al.picUrl,
+            id: data.id,
+            name: data.name,
+            picUrl: data.al.picUrl,
             song:{
-                artists: item.ar
+                artists: data.ar
             }
         }
         let arr = []
-        this.songlistAll.forEach(item => {
+        let forArr = ''
+        if(this.sheetType == 'songSheet'){
+            forArr = JSON.parse(JSON.stringify(this.songlistAll))
+        }else if(this.sheetType == 'albumSheet'){
+            forArr = JSON.parse(JSON.stringify(this.songlistarr))
+        }
+        forArr.forEach(item => {
             let obj = {
                 id: item.id,
                 name: item.name,
@@ -209,7 +216,9 @@ export default {
         this.audioPlay(SongInfo,arr)
     },
     gosheetdetail(id){
-      this.$router.push({name:'sheetdetail',query: {id:id,sheetType:'albumSheet'}}) //sheetType songSheet为歌单
+        if(this.$route.query.id != id){
+            this.$router.push({name:'sheetdetail',query: {id:id,sheetType:'albumSheet'}}) //sheetType songSheet为歌单
+        }
     },
     init(){
         this.songlistarr = []
@@ -238,13 +247,14 @@ export default {
         this.sheetType = data
     },
     $route (to, from){
-      switch (this.sheetType) {
+        this.sheetType = this.$route.query.sheetType
+        switch (this.sheetType) {
             case 'songSheet':
                 this.getAllSong(this.$route.query.id)
                 break;
             default:
                 break;
-      }
+        }
     }
   }
 }

@@ -25,7 +25,7 @@
                   <div class="wz fl createinfo-data"><span class="cla">{{detailinfo.playCount}}</span>次播放</div>
                 </div>
                 <div v-else>
-                  <div class="album-createinfo clear">
+                  <div class="album-createinfo clear" v-if="creator.length > 0">
                       <div class="wz fl">歌手：</div>
                       <div class="wz fl album-createinfo-span" v-for="(item,index) in creator" :key="index">
                         <em v-if="index != 0">/</em>
@@ -250,7 +250,9 @@ export default {
 }
 .album-createinfo .album-createinfo-span{
   margin:0;
-  cursor: pointer;
+}
+.album-createinfo .album-createinfo-span span{
+ cursor: pointer;
 }
 .album-createinfo .album-createinfo-span em{
   padding-left: 5px;
