@@ -3,7 +3,7 @@ export const getCookie = () => {};
 
 
 
-
+import moment from 'moment'
 
 export const IsPC = () => {
     var userAgentInfo = navigator.userAgent;
@@ -36,7 +36,7 @@ export const seconds = (times) => {
     }
 }
 export const getLocalTime = (nS) => {
-  return new Date(parseInt(nS)).toLocaleString().replace(new RegExp('/', "g"), "-").replace(/日/g, " ");
+  return moment(nS).format('YYYY-MM-DD');
 }
 
 export const numchangecn = (value) => {

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {songdetaiilcomment} from "@/api/api"
+import {songdetaiilcomment,getCommentAlbum} from "@/api/api"
 import {getLocalTime} from "@/api/common"
 export default {
   name: 'sheetcomment',
@@ -51,22 +51,35 @@ export default {
   },
   methods:{
     getcomment(){
-        this.postJson(songdetaiilcomment,{id:this.commentId,limit:this.limit},(res) => {
-            if(res.data.code == 200){
-                this.commentdata = res.data.hotComments
-            }
-        },(err)=>{
+      this.postJson(songdetaiilcomment,{id:this.commentId,limit:this.limit},(res) => {
+        if(res.data.code == 200){
+          this.commentdata = res.data.hotComments
+        }
+      },(err)=>{
 
-        })
+      })
+    },
+    getCommentAlbum(){
+      this.postJson(getCommentAlbum,{id:this.commentId,limit:this.limit},(res) => {
+        if(res.data.code == 200){
+          this.commentdata = res.data.hotComments
+        }
+      },(err)=>{
+
+      })
     },
     getdatacn(data){
-        return getLocalTime(data)
+      return getLocalTime(data)
     }
   },
   watch:{
     sheetcommentId(Id){
         this.commentId = Id
-        this.getcomment();
+        if(this.$route.query.sheetType == 'songSheet'){
+          this.getcomment();
+        }else if(this.$route.query.sheetType == 'albumSheet'){
+          this.getCommentAlbum();
+        }
     }
   }
 }

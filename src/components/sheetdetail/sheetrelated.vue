@@ -1,6 +1,6 @@
 <template>
     <div class="sd-box slrecommend-box">
-        <div class="title">相关歌单推荐</div>
+        <div class="title">{{$route.query.sheetType == 'songSheet' ? '相关歌单推荐':'Ta的其他热门专辑'}}</div>
         <div class="slrecommend clear">
             <div v-for="(item,index) in relateddata" :key="index" class="slrecommend-list clear" @click="gosheetdetail(item.id)">
                 <div class="slrecommend-img fl">
@@ -8,7 +8,8 @@
                 </div>
                 <div class="slrecommend-content fl">
                     <div class="title">{{item.name}}</div>
-                    <div class="creator">By.{{item.creator.nickname}}</div>
+                    <div class="creator" v-if="$route.query.sheetType == 'songSheet'">By.{{item.creator && item.creator.nickname ? item.creator.nickname : ''}}</div>
+                    <div v-else>{{getLocalTime(item.publishTime)}}</div>
                 </div>
             </div>
             <div v-if="relateddata.length == 0">暂无数据</div>
@@ -17,7 +18,8 @@
 </template>
 
 <script>
-import {related} from "@/api/api"
+import {related,getArtistAlbum} from "@/api/api"
+import {getLocalTime} from "@/api/common"
 export default {
   name: 'sheettrelated',
   data(){
@@ -28,6 +30,7 @@ export default {
   },
   props:[
     'sheetcommentId',
+    'sheetSingerId'
   ],
   components:{
     
@@ -43,20 +46,56 @@ export default {
       this.postJson(related,{id:id},(res) => {
         if(res.data.code == 200){
           this.relateddata = res.data.playlists
-          
         }
       },(err) => {
 
       })
     },
+    getArtistAlbum(id){
+      this.postJson(getArtistAlbum,{id:id},(res) => {
+        if(res.data.code == 200){
+          this.relateddata = [];
+          let arr = []
+          res.data.hotAlbums.forEach((item,index) => {
+            if(index > 4){
+              return
+            }
+            let obj = {}
+            obj.id = item.id
+            obj.coverImgUrl = item.picUrl
+            obj.name = item.name
+            obj.publishTime = item.publishTime
+            arr.push(obj)
+          });
+          this.relateddata = arr
+        }
+      },(err) => {
+
+      })
+    },
+    getLocalTime(date){
+      return getLocalTime(date)
+    },
     gosheetdetail(id){
-      this.$router.push({name:'sheetdetail',query: {id:id,sheetType:'songSheet'}})
+      let obj = ''
+      if(this.$route.query.sheetType == 'songSheet'){
+        obj = {id:id,sheetType:'songSheet'}
+      }else if(this.$route.query.sheetType == 'albumSheet'){
+        obj = {id:id,sheetType:'albumSheet'}
+      }
+      this.$router.push({name:'sheetdetail',query: obj})
     },
   },
   watch:{
-    sheetcommentId(Id){
-      this.commentId = Id
-      this.getrelated(Id);
+    sheetcommentId(id){
+      if(this.$route.query.sheetType == 'songSheet'){
+        this.getrelated(id);
+      }
+    },
+    sheetSingerId(id){
+      if(this.$route.query.sheetType == 'albumSheet'){
+        this.getArtistAlbum(id)
+      }
     }
   }
 }

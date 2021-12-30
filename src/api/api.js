@@ -43,3 +43,9 @@ export const userdetail = api + '/user/detail'
 
 // ===================专辑
 export const getAlbum = api + '/album'
+// ===================专辑动态信息 
+export const getAlbumDetailDynamic = api + '/album/detail/dynamic'
+// ===================歌手专辑
+export const getArtistAlbum = api + '/artist/album'
+// ===================专辑评论
+export const getCommentAlbum = api + '/comment/album'

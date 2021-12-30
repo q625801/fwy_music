@@ -7,7 +7,7 @@
             </div>
             <div v-if="subscribersdata.length == 0">暂无数据</div>
         </div>
-        <div class="subscribnum">1042.7万人收藏</div>
+        <!-- <div class="subscribnum">1042.7万人收藏</div> -->
     </div>
 </template>
 
@@ -36,6 +36,7 @@ export default {
   methods:{
     getsubscribers(id){
       this.postJson(subscribers,{id:id},(res) => {
+        console.log(res,'收藏歌单')
         if(res.data.code == 200){
           this.subscribersdata = res.data.subscribers
         }
@@ -45,9 +46,9 @@ export default {
     },
   },
   watch:{
-    sheetcommentId(Id){
-        this.commentId = Id
-        this.getsubscribers(Id);
+    sheetcommentId(id){
+      console.log(id,'getsubscribers')
+        this.getsubscribers(id);
     }
   }
 }

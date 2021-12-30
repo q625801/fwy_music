@@ -49,8 +49,8 @@
           <songlist :songarr="detailinfo.trackIds" :stdetaildata="detailinfo" :getsheetType="sheetType"></songlist>
         </div>
         <div class="sd-right fr">
-          <sheetlike :sheetcommentId="sheetId"></sheetlike>
-          <sheetrelated :sheetcommentId="sheetId" @changesheetcommentId="changesddetail"></sheetrelated>
+          <sheetlike :sheetcommentId="sheetId" v-show="sheetType == 'songSheet'"></sheetlike>
+          <sheetrelated :sheetcommentId="sheetId" :sheetSingerId="singerId" @changesheetcommentId="changesddetail"></sheetrelated>
           <sheetcomment :sheetcommentId="sheetId"></sheetcomment>
         </div>
       </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import {sddetail,getAlbum} from "@/api/api"
+import {sddetail,getAlbum,getAlbumDetailDynamic} from "@/api/api"
 import {getLocalTime} from "@/api/common"
 import songlist from "@/components/sheetdetail/songlist"
 import sheetcomment from "@/components/sheetdetail/sheetcomment"
@@ -73,6 +73,7 @@ export default {
       creator:'',
       sheetId:'',
       sheetType:'',
+      singerId:'',
     }
   },
   components:{
@@ -89,14 +90,30 @@ export default {
   },
   methods:{
     choosDetail(id){
+      this.sheetId = id;
       if(this.sheetType == 'songSheet'){
         this.getsddetail(id);
       }else if(this.sheetType == 'albumSheet'){
-        this.getsAblbum(id)
+        this.singerId = ''
+        let getAblbum = this.getAblbum(id)
+        let getAlbumDetailDynamic = this.getAlbumDetailDynamic(id)
+        Promise.all([getAblbum,getAlbumDetailDynamic]).then(res => {
+          let AblbumData = res[0].data
+          let AlbumDeatilDynamic = res[1].data
+          //因歌单和专辑接口JSON数据格式不同重写JSON格式
+          this.detailinfo = {
+            coverImgUrl:AblbumData.album.picUrl,
+            name:AblbumData.album.name,
+            trackIds:AblbumData.songs,
+            createTime:getLocalTime(AblbumData.album.publishTime).split(" ")[0],
+            subscribedCount:AlbumDeatilDynamic.subCount
+          };
+          this.creator = AblbumData.album.artists;
+          this.singerId = AblbumData.album.artists[0].id
+        })
       }
     },
     getsddetail(id){
-      this.sheetId = id;
       this.postJson(sddetail,{id:id},(res) => {
         if(res.data.code == 200){
           this.detailinfo = res.data.playlist;
@@ -107,24 +124,28 @@ export default {
 
       })
     },
-    getsAblbum(id){
-      this.sheetId = id;
-      this.postJson(getAlbum,{id:id},(res) => {
-        //因歌单和专辑接口JSON数据格式不同重写JSON格式
-        this.detailinfo = {
-          coverImgUrl:res.data.album.picUrl,
-          name:res.data.album.name,
-          trackIds:res.data.songs,
-          createTime:getLocalTime(res.data.album.publishTime).split(" ")[0]
-        };
-        this.creator = res.data.album.artists;
-      },(err)=>{
-
+    getAblbum(id){
+      return new Promise((resolve,reject) => {
+        this.postJson(getAlbum,{id:id},(res) => {
+          resolve(res)
+        },(err)=>{
+          reject(err)
+        })
       })
     },
     changesddetail(id){
       this.choosDetail(id)
-    }
+    },
+    getAlbumDetailDynamic(id){
+      return new Promise((resolve,reject) => {
+        this.postJson(getAlbumDetailDynamic,{id:id},(res) => {
+          resolve(res)
+        },(err)=>{
+          reject(err)
+        })
+      })
+    },
+    
   },
   watch:{
     $route (to, from){

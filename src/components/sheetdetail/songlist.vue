@@ -174,7 +174,6 @@ export default {
         }
     },
     getAllSong(id){
-        console.log('getAllSong')
         this.postJson(sdsongAll,{id:id},(res) => {
             if(res.data.code == 200){
                 this.songlistAll = res.data.songs
