@@ -36,7 +36,6 @@ export default {
   methods:{
     getsubscribers(id){
       this.postJson(subscribers,{id:id},(res) => {
-        console.log(res,'收藏歌单')
         if(res.data.code == 200){
           this.subscribersdata = res.data.subscribers
         }
@@ -47,8 +46,7 @@ export default {
   },
   watch:{
     sheetcommentId(id){
-      console.log(id,'getsubscribers')
-        this.getsubscribers(id);
+      this.getsubscribers(id);
     }
   }
 }

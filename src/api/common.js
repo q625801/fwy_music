@@ -48,7 +48,7 @@ export const numchangecn = (value) => {
   while (value / fr >= 1) {
     fr *= 10;
     num += 1;
-    console.log('数字', value / fr, 'num:', num);
+    // console.log('数字', value / fr, 'num:', num);
   }
   if (num <= 4) { // 千
     newValue[1] = '千';

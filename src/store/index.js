@@ -52,6 +52,14 @@ const store = new Vuex.Store({
         setSongList(state,data){
             state.audioInfo.SongList = data
         },
+        setSongInfoInit(state){
+            state.audioInfo.SongInfo = {//重置播放器的音乐数据
+                SongId:'',
+                SongName:'',
+                SongPic:'',
+                SongArtists:''
+            }
+        }
         //播放器end
     }
 })

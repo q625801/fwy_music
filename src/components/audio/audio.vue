@@ -97,7 +97,12 @@ export default {
         if(res.data.data[0].url != null){
           this.$refs.audio.src = res.data.data[0].url;
         }else{
-          this.$message({message:'获取歌曲失败，自动跳转下一首！',customClass:'zZindex'});
+          this.$message({message:'获取音源失败，自动跳转下一首！',customClass:'zZindex'});
+          if(this.$store.getters.getSongList.length == 1){
+            this.$store.commit('setSongInfoInit')
+            this.$store.commit('setAudioFlag',false)
+            return
+          }
           this.nextSong()
         }
         
@@ -342,6 +347,9 @@ export default {
   },
   watch:{
     getSongInfo(newval,oldval){
+      if(!newval.SongId){
+        return
+      }
       this.init()
       if(!this.$store.state.audioInfo.audioFlag){
         this.$store.commit('setAudioFlag',true)

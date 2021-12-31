@@ -18,7 +18,7 @@
               <span>排行榜<em></em></span>
             </li>
             <li class="fl pchide">
-              <span>歌单<em></em></span>
+              <span @click="$router.push({name:'songsheet'})">歌单<em></em></span>
             </li>
             <li class="fl">
               <span>歌手<em></em></span>

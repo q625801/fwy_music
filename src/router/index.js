@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from '@/pages/Index'
 import sheetdetail from '@/pages/sheetdetail'
 import userhome from '@/pages/userhome'
+import songsheet from '@/pages/songsheet'
 Vue.use(Router)
 
 export default new Router({
@@ -22,5 +23,10 @@ export default new Router({
       name: 'userhome',
       component: userhome
     },
+    {
+      path: '/songsheet',
+      name: 'songsheet',
+      component: songsheet
+    }
   ]
 })
