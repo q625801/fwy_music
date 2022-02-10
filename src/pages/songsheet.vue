@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import {getPlaylistCatlist} from "@/api/api"
 export default {
   name: 'songsheet',
   data () {
@@ -19,11 +20,19 @@ export default {
   components:{
     
   },
-  created(){
-    
+  mounted(){
+    this.getCatList()
   },
   methods:{
-    
+    getCatList(){
+      this.postJson(getPlaylistCatlist,{},(res) => {
+        if(res.data.code == 200){
+
+        }
+      },(err) => {
+
+      })
+    }
   }
 }
 </script>

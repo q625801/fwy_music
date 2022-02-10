@@ -29,3 +29,17 @@ export const post_json = (url, params) => {
       url: url
     })
 }
+export const get_json = (url, params) => {
+  var p = {};
+  if (params instanceof Object) {
+    p = params;
+  }
+  return instance({
+    headers: {
+      'Content-Type': "application/json;charset=utf-8"
+    },
+    params: p,
+    method: 'get',
+    url: url
+  })
+}

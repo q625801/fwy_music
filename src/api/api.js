@@ -49,3 +49,6 @@ export const getAlbumDetailDynamic = api + '/album/detail/dynamic'
 export const getArtistAlbum = api + '/artist/album'
 // ===================专辑评论
 export const getCommentAlbum = api + '/comment/album'
+
+// ===================歌单分类信息
+export const getPlaylistCatlist = api + '/top/playlist/highquality'
