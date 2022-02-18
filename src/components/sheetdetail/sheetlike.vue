@@ -72,6 +72,7 @@ export default {
   box-sizing: border-box;
   margin-bottom: 10px;
   padding: 0 5px;
+  max-height: 53.67px;
 }
 .sd-box .likeuser .user-headimg img{
   width: 100%;
