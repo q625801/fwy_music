@@ -46,7 +46,7 @@ export default {
   methods:{
     getnewsong(){
       var that = this;
-      this.postJson(newsong,{},(res) => {
+      this.getJson(newsong,{},(res) => {
         this.newsongdata = res.data.result;
       },(err)=>{
 

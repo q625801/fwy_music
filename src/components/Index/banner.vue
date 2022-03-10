@@ -40,7 +40,7 @@ export default {
   methods:{
     getbanner(){
         var that = this;
-        this.postJson(banner,{type:0},(res) => {
+        this.getJson(banner,{type:0},(res) => {
             this.carouselArr = res.data.banners
         },(err)=>{
 

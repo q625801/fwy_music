@@ -114,7 +114,7 @@ export default {
       }
     },
     getsddetail(id){
-      this.postJson(sddetail,{id:id},(res) => {
+      this.getJson(sddetail,{id:id},(res) => {
         if(res.data.code == 200){
           this.detailinfo = res.data.playlist;
           this.detailinfo.createTime = getLocalTime(res.data.playlist.createTime).split(" ")[0];
@@ -126,7 +126,7 @@ export default {
     },
     getAblbum(id){
       return new Promise((resolve,reject) => {
-        this.postJson(getAlbum,{id:id},(res) => {
+        this.getJson(getAlbum,{id:id},(res) => {
           resolve(res)
         },(err)=>{
           reject(err)
@@ -138,7 +138,7 @@ export default {
     },
     getAlbumDetailDynamic(id){
       return new Promise((resolve,reject) => {
-        this.postJson(getAlbumDetailDynamic,{id:id},(res) => {
+        this.getJson(getAlbumDetailDynamic,{id:id},(res) => {
           resolve(res)
         },(err)=>{
           reject(err)

@@ -51,7 +51,7 @@ export default {
   },
   methods:{
     getcomment(){
-      this.postJson(songdetaiilcomment,{id:this.commentId,limit:this.limit},(res) => {
+      this.getJson(songdetaiilcomment,{id:this.commentId,limit:this.limit},(res) => {
         if(res.data.code == 200){
           this.commentdata = res.data.hotComments
         }
@@ -60,7 +60,7 @@ export default {
       })
     },
     getCommentAlbum(){
-      this.postJson(getCommentAlbum,{id:this.commentId,limit:this.limit},(res) => {
+      this.getJson(getCommentAlbum,{id:this.commentId,limit:this.limit},(res) => {
         if(res.data.code == 200){
           this.commentdata = res.data.hotComments
         }

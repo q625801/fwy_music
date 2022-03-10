@@ -35,7 +35,7 @@ export default {
   methods:{
     getsheet(){
       var that = this;
-      this.postJson(personalized,{},(res) => {
+      this.getJson(personalized,{},(res) => {
         this.songsheetdata = res.data.result;
       },(err)=>{
 

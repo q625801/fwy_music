@@ -72,7 +72,7 @@ export default {
   methods:{
     getsddetail(){
       var that = this;
-      this.postJson(userdetail,{uid:that.$route.query.uid},(res) => {
+      this.getJson(userdetail,{uid:that.$route.query.uid},(res) => {
         if(res.data.code == 200){
           that.userprofile = res.data.profile;
           that.userlevel = res.data.level

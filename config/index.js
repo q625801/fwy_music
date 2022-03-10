@@ -12,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://localhost:3000', // 设置调用的接口域名和端口号 ( 设置代理目标)
+        // target:'http://localhost:3000',
+        target: 'https://netease-cloud-music-api-orcin-seven.vercel.app', // 设置调用的接口域名和端口号 ( 设置代理目标)
         changeOrigin: true,
         pathRewrite: {
 
@@ -59,7 +60,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

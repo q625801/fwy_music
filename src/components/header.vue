@@ -95,7 +95,7 @@ export default {
   },
   methods:{
     getseach(){
-      this.postJson(hotsearch,{},(res) => {
+      this.getJson(hotsearch,{},(res) => {
         this.hotlist = res.data.result.hots;
       },(err)=>{
 

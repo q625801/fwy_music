@@ -93,7 +93,7 @@ export default {
       this.is_yuanmousedown = false
     },
     getmusicurl(id){
-      this.postJson(mp3url,{id:id},(res) => {
+      this.getJson(mp3url,{id:id},(res) => {
         if(res.data.data[0].url != null){
           this.$refs.audio.src = res.data.data[0].url;
         }else{
@@ -112,7 +112,7 @@ export default {
       },false)
     },
     getlyric(id){
-      this.postJson(songlyric,{id:id},(res) => {
+      this.getJson(songlyric,{id:id},(res) => {
         this.$refs.lyric.init(res.data.lrc.lyric,res.data.lrc.version) //网易云歌词version 参数 1:有时间 2.没时间
       },(err) => {
 

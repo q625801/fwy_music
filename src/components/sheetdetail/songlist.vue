@@ -126,7 +126,7 @@ export default {
     getsongdata(data){
         this.showsongmore = true;
         this.songmoreloading = true;
-        this.postJson(songsdetail,{ids:data.toString()},(res) => {
+        this.getJson(songsdetail,{ids:data.toString()},(res) => {
             if(res.data.code == 200){
                 this.songlistdata = this.songlistdata.concat(res.data.songs);
                 if(this.songlistdata.length < this.songlistarr.length){
@@ -174,7 +174,7 @@ export default {
         }
     },
     getAllSong(id){
-        this.postJson(sdsongAll,{id:id},(res) => {
+        this.getJson(sdsongAll,{id:id},(res) => {
             if(res.data.code == 200){
                 this.songlistAll = res.data.songs
             }

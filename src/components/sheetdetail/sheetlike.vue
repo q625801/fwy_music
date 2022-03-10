@@ -35,7 +35,7 @@ export default {
   },
   methods:{
     getsubscribers(id){
-      this.postJson(subscribers,{id:id},(res) => {
+      this.getJson(subscribers,{id:id},(res) => {
         if(res.data.code == 200){
           this.subscribersdata = res.data.subscribers
         }

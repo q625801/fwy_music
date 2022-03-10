@@ -43,7 +43,7 @@ export default {
   },
   methods:{
     getrelated(id){
-      this.postJson(related,{id:id},(res) => {
+      this.getJson(related,{id:id},(res) => {
         if(res.data.code == 200){
           this.relateddata = res.data.playlists
         }
@@ -52,7 +52,7 @@ export default {
       })
     },
     getArtistAlbum(id){
-      this.postJson(getArtistAlbum,{id:id},(res) => {
+      this.getJson(getArtistAlbum,{id:id},(res) => {
         if(res.data.code == 200){
           this.relateddata = [];
           let arr = []

@@ -25,7 +25,7 @@ export default {
   },
   methods:{
     getCatList(){
-      this.postJson(getPlaylistCatlist,{},(res) => {
+      this.getJson(getPlaylistCatlist,{},(res) => {
         if(res.data.code == 200){
 
         }
